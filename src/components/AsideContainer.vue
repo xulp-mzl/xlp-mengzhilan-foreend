@@ -89,19 +89,28 @@ export default {
   },
   watch: {
     '$route.fullPath': {
-      handler(val) {
+      handler(val, oldVal) {
         const tempFlag = this.clickItemFlag
         if (!tempFlag){
           const item = util.findFromTree(this.items, val, 'path')
           if (item){
             this.defaultActive = ''
-            if (!item.children){
+            if (!item.children || item.children.length === 0){
               this.selectedItem(val)
             }
             this.$nextTick(() => {
               this.defaultActive = val
               this.scrollToSelectedItem()
             })
+          } else {
+            // 延迟处理数据
+            setTimeout(() => {
+              this.selectedItem(val)
+              this.$nextTick(() => {
+                this.defaultActive = val
+                this.scrollToSelectedItem()
+              })
+            }, 800)
           }
         }
         this.clickItemFlag = false

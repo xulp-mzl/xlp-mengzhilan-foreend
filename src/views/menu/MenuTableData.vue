@@ -8,7 +8,6 @@
                          :tree-props="{children: 'children'}"
                          :row-key="rowKeyName"
                          highlight-current-row
-                         header-row-class-name="custom-table-header"
                          @row-click="handleRowClick">
       <template #tableToolbar>
         <el-button type="primary" icon="el-icon-plus" plain size="small" @click="createMenuItem">新建</el-button>
