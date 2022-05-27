@@ -1,28 +1,29 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+import CommonTableInfo from '@/views/CommonTableInfo'
+import MenuTableData from '@/views/menu/MenuTableData'
+
+// fix vue-router NavigationDuplicated
+const VueRouterPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return VueRouterPush.call(this, location).catch(err => err)
+}
+const VueRouterReplace = VueRouter.prototype.replace
+VueRouter.prototype.replace = function replace(location) {
+  return VueRouterReplace.call(this, location).catch(err => err)
+}
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+  {path: '/menu/setting', component: MenuTableData},
+  {path: '/tableInfo2', component: CommonTableInfo},
+  {path: '/tableInfo3', component: CommonTableInfo},
+  {path: '/tableInfo4', component: CommonTableInfo}
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
   routes
 })
 

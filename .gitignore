@@ -21,3 +21,16 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+
+.classpath
+.gitignore
+.project
+target
+doc
+.settings
+.idea/
+.idea
+xlp-core.iml
+src/test
+.git
