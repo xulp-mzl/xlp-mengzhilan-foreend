@@ -104,13 +104,15 @@ export default {
             })
           } else {
             // 延迟处理数据
+            this.defaultActive = val
             setTimeout(() => {
               this.selectedItem(val)
               this.$nextTick(() => {
                 this.defaultActive = val
                 this.scrollToSelectedItem()
               })
-            }, 800)
+              this.clickItemFlag = false
+            }, 1500)
           }
         }
         this.clickItemFlag = false

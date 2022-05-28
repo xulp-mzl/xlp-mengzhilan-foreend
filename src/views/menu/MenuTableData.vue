@@ -8,29 +8,20 @@
                          :tree-props="{children: 'children'}"
                          :row-key="rowKeyName"
                          highlight-current-row
-                         @row-click="handleRowClick">
+                         @row-click="handleRowClick"
+                        :table-title="tableTitle">
       <template #tableToolbar>
         <el-button type="primary" icon="el-icon-plus" plain size="small" @click="createMenuItem">新建</el-button>
       </template>
-      <el-table-column prop="title" label="名称" width="200" min-width="30" show-overflow-tooltip>
-        <template #default="scope">
-          <el-radio v-model="selectedRowIndex" :label="scope.row[rowKeyName]" name="id"
-                    @click.native.stop="selectRow">{{ scope.row.title }}</el-radio>
-        </template>
-      </el-table-column>
-      <el-table-column prop="path" label="路由">
-      </el-table-column>
-      <el-table-column prop="iconType" label="图标类型" >
-      </el-table-column>
-      <el-table-column prop="icon" label="图标" align="center" width="60">
-        <template #default="scope">
-          <i :class="scope.row.icon" v-if="scope.row.iconType === 'element-ui' && scope.row.icon"></i>
-        </template>
-      </el-table-column>
-      <el-table-column prop="weight" label="排序号">
-      </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="200">
-      </el-table-column>
+
+      <template #icon="scope">
+        <i :class="scope.row.icon" v-if="scope.row.iconType === 'element-ui' && scope.row.icon"></i>
+      </template>
+
+      <template #title="scope">
+        <el-radio v-model="selectedRowIndex" :label="scope.row[rowKeyName]" name="id"
+                  @click.native.stop="selectRow">{{ scope.row.title }}</el-radio>
+      </template>
 
       <el-table-column fixed="right" label="操作" width="100">
         <template #default="scope">
@@ -70,7 +61,41 @@ export default {
       rowKeyName: 'id',
       showCreateForm: false,
       isRemoved: false,
-      edit: false
+      edit: false,
+      tableTitle: [
+        {
+          label: '名称', // 标题名称
+          prop: 'title', // 字段名称
+          width: 200, // 列宽
+          minWidth: 30, // 列最小宽度
+          slot: true // 是否添加自定义内容 false, true, slot名称为prop
+        },
+        {
+          label: '路由', // 标题名称
+          prop: 'path' // 字段名称
+        },
+        {
+          label: '图标类型', // 标题名称
+          prop: 'iconType' // 字段名称
+        },
+        {
+          label: '图标', // 标题名称
+          prop: 'icon', // 字段名称
+          width: 60, // 列宽
+          align: 'center',
+          slot: true // 是否添加自定义内容 false, true, slot名称为prop
+        },
+        {
+          label: '排序号', // 标题名称
+          prop: 'weight', // 字段名称
+          sortable: true // 是否可排序
+        },
+        {
+          label: '创建时间', // 标题名称
+          prop: 'createTime', // 字段名称
+          width: 200 // 列宽
+        }
+      ]
     }
   },
   methods: {
@@ -89,7 +114,6 @@ export default {
     },
     // 处理选中行的数据
     handleRowClick(row){
-      console.log(1234)
       // eslint-disable-next-line eqeqeq
       if (this.selectedRowIndex == row[this.rowKeyName]){
         this.selectedRowIndex = ''
