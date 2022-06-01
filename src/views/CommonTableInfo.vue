@@ -1,11 +1,71 @@
 <template>
   <div id="data-info">
     <el-table :data="tableData" border>
-      <el-table-column prop="date" label="日期" width="140">
+      <el-table-column label="日期" >
+        <el-table-column prop="date" label="日期1" width="400" label-class-name="custom-column">
+          <template #header>
+           <el-row :gutter="5">
+              <el-col :span="11">
+               <el-time-picker
+                    size="mini" style="width: 100%" v-model="filterData.startDate"
+                    placeholder="任意时间点">
+                </el-time-picker>
+                <!--<el-date-picker size="mini" style="width: 100%" v-model="filterData.startDate"
+                    type="datetime"
+                    placeholder="选择开始日期时间">
+                </el-date-picker>-->
+              </el-col>
+              <el-col :span="2" style="text-align: center;">
+                <span>&#45;&#45;</span>
+              </el-col>
+              <el-col :span="11">
+                <el-date-picker size="mini" style="width: 100%" v-model="filterData.endDate"
+                    type="datetime"
+                    placeholder="选择结束日期时间">
+                </el-date-picker>
+              </el-col>
+            </el-row>
+            <!--<el-date-picker style="width: 100%"
+                v-model="filterData.startDate"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                unlink-panels>
+            </el-date-picker>-->
+          </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column prop="name" label="姓名" width="120">
+      <el-table-column label="姓名">
+        <el-table-column prop="name" width="120" label-class-name="custom-column">
+          <template #header>
+            <el-input placeholder="请输入内容"  size="mini" v-model="filterData.name"></el-input>
+          </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column prop="address" label="地址">
+      <el-table-column label="地址" sortable >
+        <el-table-column prop="address" label-class-name="custom-column">
+          <template #header>
+            <el-select v-model="filterData.descptor"  placeholder="请选择" size="mini" collapse-tags clearable
+                       style="width: 100%; overflow: hidden;  white-space: nowrap;" multiple>
+              <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value" >
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column label="操作" fixed="right">
+        <el-table-column label-class-name="custom-column" fixed="right">
+          <template #header>
+            <el-button type="primary" icon="el-icon-search" size="mini" plain @click.native.stop="searchData">搜索</el-button>
+            <el-button type="primary" icon="el-icon-search" size="mini" plain @click.native.stop="clearData">清空</el-button>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table>
 
@@ -43,7 +103,25 @@ export default {
       currentPage: 1,
       total: 8,
       pageSize: 3,
-      pageSizes: [3, 5, 10, 15]
+      pageSizes: [3, 5, 10, 15],
+      filterData: undefined,
+      name: '',
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }]
     }
   },
   methods: {
@@ -67,22 +145,45 @@ export default {
     async getData(){
       const data = await request.get('/test?id=8')
       console.log(data)
+    },
+    searchData(){
+      console.log(this.filterData)
+    },
+    clearData(){
+      for (const i in this.filterData){
+        console.log(i)
+        this.filterData[i] = null
+      }
     }
   },
   created(){
     this.getTablePageData(this.currentPage, this.pageSize)
 
     this.getData()
+
+    this.filterData = {
+      startDate: null,
+      endDate: null,
+      name: null,
+      description: null
+    }
+    console.log(Object.prototype.toString.call(new Date()))
   }
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
   #data-info{
     .pagination-container{
       margin-top: 15px;
       background-color: white;
       padding: 10px;
+    }
+    .custom-column{
+      background-color: white!important;
+    }
+    .el-table th.is-hidden > *, .el-table  td.is-hidden>*{
+      visibility: visible;
     }
   }
 </style>

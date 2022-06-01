@@ -1,15 +1,14 @@
 <template>
   <div class="menu-table-data-container">
     <common-border-table ref="tableData"
-                         :data="menuData"
-                         :default-expand-all="true"
-                         v-loading="loading"
-                         style="width: 100%"
-                         :tree-props="{children: 'children'}"
-                         :row-key="rowKeyName"
-                         highlight-current-row
-                         @row-click="handleRowClick"
-                        :table-title="tableTitle">
+       :data="menuData"
+       v-loading="loading"
+       :row-key="rowKeyName"
+       @row-click="handleRowClick"
+      :table-title="tableTitle"
+      :filterable="true"
+      :expand-row-keys="['icon']"
+      :filter-into="filterInto">
       <template #tableToolbar>
         <el-button type="primary" icon="el-icon-plus" plain size="small" @click="createMenuItem">新建</el-button>
       </template>
@@ -23,12 +22,10 @@
                   @click.native.stop="selectRow">{{ scope.row.title }}</el-radio>
       </template>
 
-      <el-table-column fixed="right" label="操作" width="100">
-        <template #default="scope">
-          <el-button @click.native.stop="deleteMenuItem(scope.row)" type="text" size="small" style="color: red;">删除</el-button>
-          <el-button type="text" size="small" @click.native.stop="editMenuItem(scope.row)">编辑</el-button>
-        </template>
-      </el-table-column>
+      <template #rowOption="scope">
+        <el-button @click.native.stop="deleteMenuItem(scope.row)" type="text" size="small" style="color: red;">删除</el-button>
+        <el-button type="text" size="small" @click.native.stop="editMenuItem(scope.row)">编辑</el-button>
+      </template>
     </common-border-table>
 
     <edit-menu-item-form :visible="showCreateForm" @removed="handleRemove" v-if="!isRemoved"
@@ -68,7 +65,8 @@ export default {
           prop: 'title', // 字段名称
           width: 200, // 列宽
           minWidth: 30, // 列最小宽度
-          slot: true // 是否添加自定义内容 false, true, slot名称为prop
+          slot: true, // 是否添加自定义内容 false, true, slot名称为prop
+          treeNode: true // 树节点
         },
         {
           label: '路由', // 标题名称
@@ -95,7 +93,16 @@ export default {
           prop: 'createTime', // 字段名称
           width: 200 // 列宽
         }
-      ]
+      ],
+      filterInto: {
+        prop: { // 字段名称
+          propType: undefined, // 字段类型，用来创建搜索框的类型
+          placeholder: '', // 过滤框提示内容
+          value: undefined, // 过滤框为下拉选择框时，输入值[label: 显示文本, value: 值]
+          defaultValue: undefined, // 默认过滤值
+          slot: false // 是否添加自定义内容 false, true, slot名称为prop
+        }
+      }
     }
   },
   methods: {

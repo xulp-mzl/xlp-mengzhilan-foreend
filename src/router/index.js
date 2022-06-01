@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import CommonTableInfo from '@/views/CommonTableInfo'
 import MenuTableData from '@/views/menu/MenuTableData'
+import CommonTableInfo1 from '@/views/CommonTableInfo1'
 
 // fix vue-router NavigationDuplicated
 const VueRouterPush = VueRouter.prototype.push
@@ -19,7 +20,7 @@ Vue.use(VueRouter)
 const routes = [
   {path: '/menu/setting', component: MenuTableData},
   {path: '/tableInfo2', component: CommonTableInfo},
-  {path: '/tableInfo3', component: CommonTableInfo},
+  {path: '/tableInfo3', component: CommonTableInfo1},
   {path: '/tableInfo4', component: CommonTableInfo}
 ]
 
