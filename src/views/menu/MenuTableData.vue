@@ -7,7 +7,6 @@
        @row-click="handleRowClick"
       :table-title="tableTitle"
       :filterable="true"
-      :expand-row-keys="['icon']"
       :filter-into="filterInto">
       <template #tableToolbar>
         <el-button type="primary" icon="el-icon-plus" plain size="small" @click="createMenuItem">新建</el-button>
@@ -95,12 +94,22 @@ export default {
         }
       ],
       filterInto: {
-        prop: { // 字段名称
-          propType: undefined, // 字段类型，用来创建搜索框的类型
-          placeholder: '', // 过滤框提示内容
+        createTime: { // 字段名称
+          propType: 'datetime', // 字段类型，用来创建搜索框的类型
           value: undefined, // 过滤框为下拉选择框时，输入值[label: 显示文本, value: 值]
           defaultValue: undefined, // 默认过滤值
           slot: false // 是否添加自定义内容 false, true, slot名称为prop
+        },
+        iconType: {
+          propType: 'multSelect', // 字段类型，用来创建搜索框的类型
+          value: [{label: 'element-ui', value: 'element-ui'}], // 过滤框为下拉选择框时，输入值[label: 显示文本, value: 值]
+          defaultValue: 'element-ui'
+        },
+        path: {
+          defaultValue: 'element-ui'
+        },
+        title: {
+          defaultValue: ['element-ui']
         }
       }
     }

@@ -19,9 +19,10 @@
 
         <el-table-column label="序号"
                          type="index"
-                         :width="filterable ? 100 : 80" align="center" fixed v-if="type == 'index'">
+                         :width="filterable ? 100 : 80" align="center" fixed v-if="type == 'index'"
+                         :resizable="!filterable">
           <el-table-column label-class-name="custom-column" v-if="filterable" type="index"
-                           width="100" align="center" fixed>
+                           width="100" align="center" fixed :resizable="false">
             <template #header>
               <el-button icon="el-icon-search" circle size="mini" type="primary" plain @click.native.stop="searchData"></el-button>
               <el-button type="info" icon="el-icon-delete" circle size="mini" plain @click.native.stop="clearData"></el-button>
@@ -31,9 +32,10 @@
 
         <el-table-column
             type="selection" align="center"
-            :width="filterable ? 100 : 50" v-if="type === 'selection'" fixed="left">
+            :width="filterable ? 100 : 50" v-if="type === 'selection'" fixed="left"
+            :resizable="!filterable">
           <el-table-column label-class-name="custom-column" v-if="filterable" fixed="left"
-                           width="100" align="center">
+                           width="100" align="center" :resizable="false">
             <template #header>
               <el-button icon="el-icon-search" circle size="mini" type="primary" plain @click.native.stop="searchData"></el-button>
               <el-button type="info" icon="el-icon-delete" circle size="mini" plain @click.native.stop="clearData"></el-button>
@@ -45,7 +47,7 @@
         </el-table-column>
 
         <el-table-column v-for="item in tableTitle" :key="item.prop"
-          :prop="filterable ? undefined : item.prop"
+          :prop="item.prop"
           :label="item.label"
           :width="item.width ? item.width : undefined"
           :min-width="item.minWidth ? item.minWidth : undefined"
@@ -55,7 +57,8 @@
           :align="item.align ? item.align : undefined"
           :class-name="item.className"
           :label-class-name="item.labelClassName"
-          :type="item.treeNode === true ? undefined : ''">
+          :type="item.treeNode === true ? undefined : ''"
+          :resizable="!filterable">
 
           <el-table-column v-if="filterable"
              :prop="item.prop"
@@ -65,10 +68,10 @@
              :fixed="item.fixed"
              :align="item.align ? item.align : undefined"
              label-class-name="custom-column"
-             :type="item.treeNode === true ? undefined : ''">
+             :type="item.treeNode === true ? undefined : ''"
+             :resizable="false">
             <template #header v-if="typeof filterInto[item.prop] === 'object'">
               <slot :name="item.prop + 'Header'" v-if="filterInto[item.prop].slot === true"></slot>
-
               <!--下拉选择框-->
               <el-select v-if="filterInto[item.prop].propType === 'select' || filterInto[item.prop].propType === 'multSelect'"
                  v-model="filterData[item.prop]"
@@ -125,7 +128,7 @@
 
               <!-- 普通输入框  -->
               <el-input v-else :placeholder="filterInto[item.prop].placeholder" size="mini"
-                        v-model="filterData.name">
+                        v-model="filterData[item.prop]">
               </el-input>
             </template>
             <template #default="scope" v-if="item.icon || item.slot">
@@ -142,8 +145,8 @@
           </template>
         </el-table-column>
 
-        <el-table-column :fixed="rowOptionFixed" label="操作" :width="rowOptionWidth" v-if="showRowOption">
-          <el-table-column label-class-name="custom-column" v-if="filterable && !type" :width="rowOptionWidth">
+        <el-table-column :fixed="rowOptionFixed" label="操作" :width="rowOptionWidth" v-if="showRowOption" :resizable="!filterable">
+          <el-table-column label-class-name="custom-column" v-if="filterable && !type" :width="rowOptionWidth" :resizable="false">
             <template #header>
               <el-button icon="el-icon-search" circle size="mini" type="primary" plain @click.native.stop="searchData"></el-button>
               <el-button type="info" icon="el-icon-delete" circle size="mini" plain @click.native.stop="clearData"></el-button>
@@ -236,21 +239,24 @@ export default {
     initFilterData(){
       if (this.filterInto){
         const newFilterData = {}
-        const newRawFilterData = {}
         for (const key in this.filterInto){
           if (this.filterInto[key].propType === 'datetime' ||
             this.filterInto[key].propType === 'date' ||
             this.filterInto[key].propType === 'time'){
-            newFilterData[key + '_start'] = undefined
+            newFilterData[key + '_start'] = this.$isInstance(this.filterInto[key].defaultValue, '[object Date]')
+              ? this.filterInto[key].defaultValue : undefined
             newFilterData[key + '_end'] = undefined
-            newRawFilterData[key + '_start'] = this.filterInto.defaultValue
+          } else if (this.filterInto[key].propType === 'multSelect'){
+            newFilterData[key] = this.$isInstance(this.filterInto[key].defaultValue, '[object Array]')
+              ? this.filterInto[key].defaultValue : undefined
           } else {
-            newFilterData[key] = undefined
-            newRawFilterData[key] = this.filterInto.defaultValue
+            newFilterData[key] = (typeof this.filterInto[key].defaultValue === 'string'
+              ? this.filterInto[key].defaultValue : '')
           }
         }
         this.filterData = {...newFilterData}
-        this.rawFilterData = {...newRawFilterData}
+        this.rawFilterData = {...newFilterData}
+        console.log(this.filterData)
       }
     }
   },

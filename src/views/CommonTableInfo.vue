@@ -182,8 +182,8 @@ export default {
     .custom-column{
       background-color: white!important;
     }
-    .el-table th.is-hidden > *, .el-table  td.is-hidden>*{
+    /*.el-table th.is-hidden > *, .el-table  td.is-hidden>*{
       visibility: visible;
-    }
+    }*/
   }
 </style>
