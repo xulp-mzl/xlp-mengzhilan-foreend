@@ -77,7 +77,8 @@
                  v-model="filterData[item.prop]"
                  :placeholder="filterInto[item.prop].placeholder"
                  size="mini" collapse-tags clearable
-                 :multiple="filterInto[item.prop].propType === 'multSelect'">
+                 :multiple="filterInto[item.prop].propType === 'multSelect'"
+                 style="width: 100%;">
                 <template v-if="typeof filterInto[item.prop].value === 'object'">
                   <el-option
                       v-for="option in filterInto[item.prop].value"
@@ -253,10 +254,10 @@ export default {
             newFilterData[key] = (typeof this.filterInto[key].defaultValue === 'string'
               ? this.filterInto[key].defaultValue : '')
           }
+          newFilterData[key + '_type'] = this.filterInto[key].propType
         }
         this.filterData = {...newFilterData}
         this.rawFilterData = {...newFilterData}
-        console.log(this.filterData)
       }
     }
   },
@@ -297,6 +298,7 @@ export default {
             overflow: hidden;/*超出部分隐藏*/
             white-space: nowrap;/*不换行*/
           }
+          padding: 5px 0;
         }
         .el-table__fixed-right-patch{
           background-color: #e7e7e7;

@@ -81,6 +81,9 @@ props: {
   }
 ```
 
+###CommonBorderTable的部分函数说明
+```
+getFilterData()
+该函数或过滤输入框中对应的类容
+```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

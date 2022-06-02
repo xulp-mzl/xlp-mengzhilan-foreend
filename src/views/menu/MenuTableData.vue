@@ -7,7 +7,9 @@
        @row-click="handleRowClick"
       :table-title="tableTitle"
       :filterable="true"
-      :filter-into="filterInto">
+      :filter-into="filterInto"
+      @search-data="filterData"
+      @clear-data="resetData">
       <template #tableToolbar>
         <el-button type="primary" icon="el-icon-plus" plain size="small" @click="createMenuItem">新建</el-button>
       </template>
@@ -41,6 +43,7 @@ import {getMenuItemData, deleteMenuItem} from '@/js/api/menuItem'
 import util from '@/js/util'
 import EditMenuItemForm from '@/components/menu/EditMenuItemForm'
 import CommonBorderTable from '@/components/common/CommonBorderTable'
+import {tableTitle, filterInto} from '@/js/menu/menuItem'
 
 export default {
   name: 'MenuTableData',
@@ -51,6 +54,7 @@ export default {
   data(){
     return {
       menuData: [],
+      tempMenuData: [],
       loading: false,
       selectedRowIndex: '',
       selectedRow: undefined,
@@ -58,60 +62,8 @@ export default {
       showCreateForm: false,
       isRemoved: false,
       edit: false,
-      tableTitle: [
-        {
-          label: '名称', // 标题名称
-          prop: 'title', // 字段名称
-          width: 200, // 列宽
-          minWidth: 30, // 列最小宽度
-          slot: true, // 是否添加自定义内容 false, true, slot名称为prop
-          treeNode: true // 树节点
-        },
-        {
-          label: '路由', // 标题名称
-          prop: 'path' // 字段名称
-        },
-        {
-          label: '图标类型', // 标题名称
-          prop: 'iconType' // 字段名称
-        },
-        {
-          label: '图标', // 标题名称
-          prop: 'icon', // 字段名称
-          width: 60, // 列宽
-          align: 'center',
-          slot: true // 是否添加自定义内容 false, true, slot名称为prop
-        },
-        {
-          label: '排序号', // 标题名称
-          prop: 'weight', // 字段名称
-          sortable: true // 是否可排序
-        },
-        {
-          label: '创建时间', // 标题名称
-          prop: 'createTime', // 字段名称
-          width: 200 // 列宽
-        }
-      ],
-      filterInto: {
-        createTime: { // 字段名称
-          propType: 'datetime', // 字段类型，用来创建搜索框的类型
-          value: undefined, // 过滤框为下拉选择框时，输入值[label: 显示文本, value: 值]
-          defaultValue: undefined, // 默认过滤值
-          slot: false // 是否添加自定义内容 false, true, slot名称为prop
-        },
-        iconType: {
-          propType: 'multSelect', // 字段类型，用来创建搜索框的类型
-          value: [{label: 'element-ui', value: 'element-ui'}], // 过滤框为下拉选择框时，输入值[label: 显示文本, value: 值]
-          defaultValue: 'element-ui'
-        },
-        path: {
-          defaultValue: 'element-ui'
-        },
-        title: {
-          defaultValue: ['element-ui']
-        }
-      }
+      tableTitle: undefined,
+      filterInto: undefined
     }
   },
   methods: {
@@ -124,7 +76,8 @@ export default {
       if (tableData.errorMsg){
         this.$msgAlert(tableData.errorMsg, 'error')
       } else {
-        this.menuData = tableData.data
+        this.tempMenuData = tableData.data
+        this.menuData = [...this.tempMenuData]
       }
       this.loading = false
     },
@@ -146,7 +99,7 @@ export default {
     },
     selectRow(e){
       const target = e.target
-      if (Object.prototype.toString.call(target) === '[object HTMLInputElement]'){
+      if (this.$isInstance(target, '[object HTMLInputElement]')){
         const value = target.value
         if (this.selectedRow && value === this.selectedRowIndex){
           this.selectedRowIndex = ''
@@ -210,10 +163,21 @@ export default {
         this.$tips('数据删除成功！')
         this.reloadData(true)
       }
+    },
+    filterData(data){
+      console.log(data)
+    },
+    resetData(data){
+      console.log(data)
+    },
+    initData(){
+      this.filterInto = filterInto
+      this.tableTitle = tableTitle
     }
   },
   created(){
     this.getMenuItemData()
+    this.initData()
   }
 }
 </script>
