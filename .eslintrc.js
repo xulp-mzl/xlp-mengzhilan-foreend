@@ -16,6 +16,7 @@ module.exports = {
     'space-before-function-paren': ['error', 'never'],
     'object-curly-spacing': 'off',
     'no-trailing-spaces': 'off',
-    'space-before-blocks': 'off'
+    'space-before-blocks': 'off',
+    'eqeqeq': 'off'
   }
 }

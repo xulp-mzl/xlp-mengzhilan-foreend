@@ -228,14 +228,14 @@ export default {
       this.maxHeight = this.$refs.tableDataContainer.offsetHeight
     },
     searchData(){
-      this.$emit('search-data', this.filterData)
+      this.$emit('search-data', {...this.filterData})
     },
     clearData(){
-      this.filterData = this.rawFilterData
-      this.$emit('clear-data', this.filterData)
+      this.filterData = {...this.rawFilterData}
+      this.$emit('clear-data', {...this.filterData})
     },
     getFilterData(){
-      return this.filterData
+      return {...this.filterData}
     },
     initFilterData(){
       if (this.filterInto){
@@ -251,8 +251,9 @@ export default {
             newFilterData[key] = this.$isInstance(this.filterInto[key].defaultValue, '[object Array]')
               ? this.filterInto[key].defaultValue : undefined
           } else {
-            newFilterData[key] = (typeof this.filterInto[key].defaultValue === 'string'
-              ? this.filterInto[key].defaultValue : '')
+            newFilterData[key] = this.filterInto[key].defaultValue === undefined
+              ? '' : this.filterInto[key].defaultValue
+            newFilterData[key + '_option'] = this.filterInto[key].optionType
           }
           newFilterData[key + '_type'] = this.filterInto[key].propType
         }

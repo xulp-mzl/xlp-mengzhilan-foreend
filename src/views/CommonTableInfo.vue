@@ -88,6 +88,7 @@
 <script>
 
 import request from '@/js/request'
+import dayjs from 'dayjs'
 
 export default {
   name: 'CommonTableInfo',
@@ -167,7 +168,20 @@ export default {
       name: null,
       description: null
     }
-    console.log(Object.prototype.toString.call(new Date()))
+    console.log(Object.prototype.toString.call(null))
+    console.log(dayjs('2022-06-06 23:15:45'))
+    console.log(dayjs('23:15:45'))
+    console.log(Number(1).toString())
+    console.log(Object.prototype.toString.call(2))
+    console.log(Object.prototype.toString.call(2.7))
+    const s = 'ww'
+    switch (s){
+      case 'ww':
+        console.log(123)
+        break
+      case 'www':
+        console.log(2333)
+    }
   }
 }
 </script>

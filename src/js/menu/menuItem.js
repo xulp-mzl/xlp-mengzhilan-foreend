@@ -20,7 +20,8 @@ export const tableTitle = [
     prop: 'icon', // 字段名称
     width: 60, // 列宽
     align: 'center',
-    slot: true // 是否添加自定义内容 false, true, slot名称为prop
+    slot: true, // 是否添加自定义内容 false, true, slot名称为prop
+    optionType: '='
   },
   {
     label: '排序号', // 标题名称

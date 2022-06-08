@@ -46,6 +46,7 @@ props: {
      default: () => {
          return {
            prop: { // 字段名称
+             optionType: '<', // <, <=, >=, =, >, like, !=
              propType: undefined, // 字段类型，用来创建搜索框的类型
              placeholder: '', // 过滤框提示内容
              value: undefined, // 过滤框为下拉选择框时，输入值[label: 显示文本, value: 值]

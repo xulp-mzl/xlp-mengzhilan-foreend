@@ -44,6 +44,7 @@ import util from '@/js/util'
 import EditMenuItemForm from '@/components/menu/EditMenuItemForm'
 import CommonBorderTable from '@/components/common/CommonBorderTable'
 import {tableTitle, filterInto} from '@/js/menu/menuItem'
+import {filterTableData} from '@/js/tableFilterUtils'
 
 export default {
   name: 'MenuTableData',
@@ -165,10 +166,10 @@ export default {
       }
     },
     filterData(data){
-      console.log(data)
+      this.menuData = filterTableData([...this.tempMenuData], data) || []
     },
     resetData(data){
-      console.log(data)
+      this.menuData = [...this.tempMenuData]
     },
     initData(){
       this.filterInto = filterInto
