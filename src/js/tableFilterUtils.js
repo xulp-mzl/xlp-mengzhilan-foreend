@@ -36,19 +36,21 @@ export function filterTableData(filterData, filterFieldInfo){
 export function filterTableTreeData(filterData, filterFieldInfo){
   if (!filterData || !filterFieldInfo) return filterData
   if (typeof filterFieldInfo === 'object'){
-    const newFilterData = []
-    // 循环过滤数据
-    filterData.forEach((item) => {
-      let success = true
-      for (const key in item){
-        success = findDataSuccess(item, filterFieldInfo, key)
-        if (!success) break
+    const array = []
+    for (let i = 0; i < filterData.length; i++) {
+      let match = true
+      for (const key in filterData[i]){
+        match = findDataSuccess(filterData[i], filterFieldInfo, key)
+        if (!match) break
       }
-      if (success){
-        newFilterData.push(item)
+      if (filterTableTreeData(filterData[i].children, filterFieldInfo).length > 0 || match) {
+        array.push({
+          ...filterData[i],
+          children: filterTableTreeData(filterData[i].children, filterFieldInfo)
+        })
       }
-    })
-    return newFilterData
+    }
+    return array
   }
   return filterData
 }
