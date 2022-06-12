@@ -14,11 +14,7 @@
         </el-form-item>
 
         <el-form-item label="路由地址："
-            prop="path"
-            :rules="[
-                { required: true, message: '路由地址不能为空'},
-              ]"
-            >
+            prop="path">
           <el-input v-model="itemInfo.path" autocomplete="off" placeholder="请输入路由地址" class="custom-input"></el-input>
         </el-form-item>
 

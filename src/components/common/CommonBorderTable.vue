@@ -147,8 +147,8 @@
         </el-table-column>
 
         <el-table-column :fixed="rowOptionFixed" label="操作" :width="rowOptionWidth" v-if="showRowOption" :resizable="!filterable">
-          <el-table-column label-class-name="custom-column" v-if="filterable && !type" :width="rowOptionWidth" :resizable="false">
-            <template #header>
+          <el-table-column label-class-name="custom-column" v-if="filterable" :width="rowOptionWidth" :resizable="false">
+            <template #header v-if="!type">
               <el-button icon="el-icon-search" circle size="mini" type="primary" plain @click.native.stop="searchData"></el-button>
               <el-button type="info" icon="el-icon-delete" circle size="mini" plain @click.native.stop="clearData"></el-button>
             </template>

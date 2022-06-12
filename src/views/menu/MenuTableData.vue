@@ -84,7 +84,6 @@ export default {
     },
     // 处理选中行的数据
     handleRowClick(row){
-      // eslint-disable-next-line eqeqeq
       if (this.selectedRowIndex == row[this.rowKeyName]){
         this.selectedRowIndex = ''
         this.selectedRow = undefined
