@@ -30,6 +30,7 @@
 import CommonBorderTable from '@/components/common/CommonBorderTable'
 import {tableTitle, filterInto} from '@/js/model/model'
 import {filterTableTreeData} from '@/js/tableFilterUtils'
+import {getModelData} from '@/js/api/model'
 
 export default {
   name: 'MenuTableData',
@@ -71,10 +72,22 @@ export default {
     initData(){
       this.filterInto = filterInto
       this.tableTitle = tableTitle
+    },
+    async getModelData(){
+      this.loading = true
+      const tableData = await getModelData()
+      if (tableData.errorMsg){
+        this.$msgAlert(tableData.errorMsg, 'error')
+      } else {
+        this.tempModelData = tableData.data
+        this.modelData = [...this.tempModelData]
+      }
+      this.loading = false
     }
   },
   created(){
     this.initData()
+    this.getModelData()
   }
 }
 </script>
