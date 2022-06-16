@@ -11,7 +11,9 @@
       @search-data="filterData"
       @clear-data="resetData">
       <template #tableToolbar>
-        <el-button type="primary" icon="el-icon-plus" plain size="small" @click="createMenuItem">新建</el-button>
+        <div class="table-toolbar">
+          <el-button type="primary" icon="el-icon-plus" plain size="small" @click="createMenuItem">新建</el-button>
+        </div>
       </template>
 
       <template #icon="scope">
@@ -185,5 +187,12 @@ export default {
 <style lang="less">
   .menu-table-data-container{
     height: 100%;
+    .table-toolbar{
+      height: 50px;
+      line-height: 50px;
+      overflow: hidden;
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 </style>

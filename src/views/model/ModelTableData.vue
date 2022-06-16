@@ -1,6 +1,6 @@
 <template>
   <div class="model-table-data-container">
-    <common-border-table ref="tableData"
+    <common-border-table-with-page
        :data="modelData"
        v-loading="loading"
       :table-title="tableTitle"
@@ -15,7 +15,7 @@
         <el-button @click.native.stop="deleteMenuItem(scope.row)" type="text" size="small" style="color: red;">删除</el-button>
         <el-button type="text" size="small" @click.native.stop="editMenuItem(scope.row)">编辑</el-button>
       </template>
-    </common-border-table>
+    </common-border-table-with-page>
 
    <!-- <edit-menu-item-form :visible="showCreateForm" @removed="handleRemove" v-if="!isRemoved"
                          @reload-parent-table="reloadData" :item-info="edit ? selectedRow : undefined"
@@ -27,15 +27,15 @@
 
 <script>
 
-import CommonBorderTable from '@/components/common/CommonBorderTable'
 import {tableTitle, filterInto} from '@/js/model/model'
 import {filterTableTreeData} from '@/js/tableFilterUtils'
 import {getModelData} from '@/js/api/model'
+import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWithPage'
 
 export default {
   name: 'MenuTableData',
   components: {
-    CommonBorderTable
+    CommonBorderTableWithPage
   },
   data(){
     return {

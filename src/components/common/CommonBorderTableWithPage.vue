@@ -1,9 +1,9 @@
 <template>
-  <div class="menu-table-data">
-    <div class="table-option-area">
+  <div class="table-outer-container" ref="outerContainer">
+    <div class="table-option-area" ref="toolbar">
       <slot name="tableToolbar"></slot>
     </div>
-    <div class="table-data-container" ref="tableDataContainer">
+    <div class="table-data-container" >
       <el-table border ref="elTable"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
@@ -163,6 +163,18 @@
         <slot></slot>
       </el-table>
     </div>
+    <div class="pagination-container" ref="paginationFooter">
+      <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="pageSizes"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -220,12 +232,35 @@ export default {
     return {
       maxHeight: 200,
       filterData: null,
-      rawFilterData: null
+      rawFilterData: null,
+      currentPage: 1,
+      total: 8,
+      pageSize: 3,
+      pageSizes: [3, 5, 10, 15]
     }
   },
   methods: {
+    handleSizeChange(val){
+      this.pageSize = val
+      this.getTablePageData(this.currentPage, val)
+    },
+    handleCurrentChange(val){
+      this.getTablePageData(val, this.pageSize)
+    },
+    getTablePageData(currentPage, pageSize){
+      currentPage = currentPage && currentPage > 0 ? currentPage : 1
+      pageSize = pageSize && pageSize > 0 ? pageSize : 0
+      const index = (currentPage - 1) * pageSize
+      const endIndex = index + pageSize
+      this.tableData = []
+      for (let i = index; i < this.tableDataSource.length && i < endIndex; i++){
+        this.tableData.push(this.tableDataSource[i])
+      }
+    },
     getTableHeight(){
-      this.maxHeight = this.$refs.tableDataContainer.offsetHeight
+      // table最大高度 = 外层容器高度 - table工具栏高度 - 分页栏高度 - 分页栏margin-top值（10px）
+      this.maxHeight = this.$refs.outerContainer.offsetHeight - this.$refs.toolbar.offsetHeight -
+          this.$refs.paginationFooter.offsetHeight - 10
     },
     searchData(){
       this.$emit('search-data', {...this.filterData})
@@ -267,7 +302,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.maxHeight = this.$refs.tableDataContainer.offsetHeight
+      this.getTableHeight()
     })
     window.addEventListener('resize', this.getTableHeight)
   },
@@ -278,16 +313,10 @@ export default {
 </script>
 
 <style lang="less">
-  .menu-table-data{
+  .table-outer-container{
     height: 100%;
-    .table-option-area{
-      height: 50px;
-      line-height: 50px;
-      width: 100%;
-      overflow: hidden;
-    }
+    overflow-y: hidden;
     .table-data-container{
-      .calcHeight(50px);
       .el-table{
         .custom-table-header{
           .el-table__cell{
@@ -317,6 +346,11 @@ export default {
           display: none !important;
         }
       }
+    }
+    .pagination-container{
+      margin-top: 10px;
+      background-color: white;
+      padding: 10px;
     }
   }
 </style>

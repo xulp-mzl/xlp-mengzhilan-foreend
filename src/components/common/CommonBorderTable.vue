@@ -1,9 +1,9 @@
 <template>
-  <div class="menu-table-data">
-    <div class="table-option-area">
+  <div class="table-outer-container" ref="outerContainer">
+    <div class="table-option-area" ref="toolbar">
       <slot name="tableToolbar"></slot>
     </div>
-    <div class="table-data-container" ref="tableDataContainer">
+    <div class="table-data-container">
       <el-table border ref="elTable"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
@@ -225,7 +225,7 @@ export default {
   },
   methods: {
     getTableHeight(){
-      this.maxHeight = this.$refs.tableDataContainer.offsetHeight
+      this.maxHeight = this.$refs.outerContainer.offsetHeight - this.$refs.toolbar.offsetHeight
     },
     searchData(){
       this.$emit('search-data', {...this.filterData})
@@ -267,7 +267,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.maxHeight = this.$refs.tableDataContainer.offsetHeight
+      this.getTableHeight()
     })
     window.addEventListener('resize', this.getTableHeight)
   },
@@ -278,16 +278,10 @@ export default {
 </script>
 
 <style lang="less">
-  .menu-table-data{
+  .table-outer-container{
     height: 100%;
-    .table-option-area{
-      height: 50px;
-      line-height: 50px;
-      width: 100%;
-      overflow: hidden;
-    }
+    overflow-y: hidden;
     .table-data-container{
-      .calcHeight(50px);
       .el-table{
         .custom-table-header{
           .el-table__cell{

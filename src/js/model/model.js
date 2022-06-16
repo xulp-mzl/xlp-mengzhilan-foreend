@@ -7,6 +7,13 @@ export const tableTitle = [
   {
     label: '模型名称', // 标题名称
     prop: 'beanName' // 字段名称
+  },
+  {
+    label: '排序号',
+    prop: 'orderNo',
+    width: 100,
+    align: 'center',
+    sortable: true
   }
 ]
 

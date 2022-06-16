@@ -1,6 +1,9 @@
 <template>
-  <div id="data-info">
-    <el-table :data="tableData" border>
+  <div id="data-info" ref="dataInfo">
+    <div class="top" ref="top">345</div>
+
+    <div class="table-data-container" ref="tableDataContainer">
+    <el-table :data="tableData" border :max-height="maxHeight" ref="tableDataContainer">
       <el-table-column label="日期" >
         <el-table-column prop="date" label="日期1" width="400" label-class-name="custom-column">
           <template #header>
@@ -68,8 +71,9 @@
         </el-table-column>
       </el-table-column>
     </el-table>
+    </div>
 
-    <div class="pagination-container">
+    <div class="pagination-container" ref="footer">
       <el-pagination
           background
           @size-change="handleSizeChange"
@@ -78,7 +82,8 @@
           :page-sizes="pageSizes"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
+          :total="total"
+      >
       </el-pagination>
     </div>
   </div>
@@ -106,6 +111,7 @@ export default {
       pageSize: 3,
       pageSizes: [3, 5, 10, 15],
       filterData: undefined,
+      maxHeight: 200,
       name: '',
       options: [{
         value: '选项1',
@@ -155,6 +161,12 @@ export default {
         console.log(i)
         this.filterData[i] = null
       }
+    },
+    getTableHeight(){
+      console.log(this.maxHeight)
+      this.maxHeight = this.$refs.dataInfo.offsetHeight - this.$refs.top.offsetHeight -
+        this.$refs.footer.offsetHeight - 8
+      console.log(this.maxHeight)
     }
   },
   created(){
@@ -182,12 +194,41 @@ export default {
       case 'www':
         console.log(2333)
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      console.log(this.maxHeight)
+      this.maxHeight = this.$refs.dataInfo.offsetHeight - this.$refs.top.offsetHeight -
+        this.$refs.footer.offsetHeight - 10
+      console.log(this.maxHeight)
+    })
+    window.addEventListener('resize', this.getTableHeight)
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.getTableHeight)
   }
 }
 </script>
 
 <style lang="less">
   #data-info{
+    height: 100%;
+    overflow-y: hidden;
+    /*overflow-y: auto;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;*/
+    .top{
+      height: 40px;
+      line-height: 40px;
+      background-color: red;
+    }
+
+    .table-data-container{
+      /*flex: 1;
+      flex-shrink: 0;*/
+    }
+
     .pagination-container{
       margin-top: 15px;
       background-color: white;
