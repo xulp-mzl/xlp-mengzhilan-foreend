@@ -166,13 +166,11 @@
     <div class="pagination-container" ref="paginationFooter">
       <el-pagination
           background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="pageSizes"
-          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
+          :page-sizes="pageSizes"
+          v-bind="$attrs"
+          v-on="$listeners">
+        <slot></slot>
       </el-pagination>
     </div>
   </div>
@@ -226,37 +224,22 @@ export default {
     highlightCurrentRow: {// 高亮选中行
       default: true,
       type: Boolean
+    },
+    pageSizes: { // 分页可选每页显示大小
+      default: () => {
+        return [10, 20, 50, 100, 200, 500]
+      },
+      type: Array
     }
   },
   data(){
     return {
       maxHeight: 200,
       filterData: null,
-      rawFilterData: null,
-      currentPage: 1,
-      total: 8,
-      pageSize: 3,
-      pageSizes: [3, 5, 10, 15]
+      rawFilterData: null
     }
   },
   methods: {
-    handleSizeChange(val){
-      this.pageSize = val
-      this.getTablePageData(this.currentPage, val)
-    },
-    handleCurrentChange(val){
-      this.getTablePageData(val, this.pageSize)
-    },
-    getTablePageData(currentPage, pageSize){
-      currentPage = currentPage && currentPage > 0 ? currentPage : 1
-      pageSize = pageSize && pageSize > 0 ? pageSize : 0
-      const index = (currentPage - 1) * pageSize
-      const endIndex = index + pageSize
-      this.tableData = []
-      for (let i = index; i < this.tableDataSource.length && i < endIndex; i++){
-        this.tableData.push(this.tableDataSource[i])
-      }
-    },
     /**
      * 设置table表头class
      */

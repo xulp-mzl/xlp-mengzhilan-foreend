@@ -1,15 +1,20 @@
 <template>
   <div class="model-table-data-container">
     <common-border-table-with-page
-       :data="modelData"
-       v-loading="loading"
-      :table-title="tableTitle"
-      :filterable="true"
-      :filter-into="filterInto"
-      @search-data="filterData"
-      @clear-data="resetData"
-      type="selection"
-      :row-option-width="350">
+     :data="modelData"
+     v-loading="loading"
+     :table-title="tableTitle"
+     :filterable="true"
+     :filter-into="filterInto"
+     @search-data="filterData"
+     @clear-data="resetData"
+     type="selection"
+     :row-option-width="350"
+     @size-change="handleSizeChange"
+     @current-change="handleCurrentChange"
+     :current-page="currentPage"
+     :page-size="pageSize"
+     :total="total">
 
       <template #tableToolbar>
         <div class="table-toolbar">
@@ -52,7 +57,10 @@ export default {
       isRemoved: false,
       edit: false,
       tableTitle: undefined,
-      filterInto: undefined
+      filterInto: undefined,
+      currentPage: 1,
+      total: 8,
+      pageSize: 3
     }
   },
   methods: {
@@ -92,6 +100,23 @@ export default {
     },
     hideModel(){
 
+    },
+    handleSizeChange(val){
+      this.pageSize = val
+      this.getTablePageData(this.currentPage, val)
+    },
+    handleCurrentChange(val){
+      this.getTablePageData(val, this.pageSize)
+    },
+    getTablePageData(currentPage, pageSize){
+      currentPage = currentPage && currentPage > 0 ? currentPage : 1
+      pageSize = pageSize && pageSize > 0 ? pageSize : 0
+      const index = (currentPage - 1) * pageSize
+      const endIndex = index + pageSize
+      this.tableData = []
+      for (let i = index; i < this.tableDataSource.length && i < endIndex; i++){
+        this.tableData.push(this.tableDataSource[i])
+      }
     }
   },
   created(){
