@@ -10,7 +10,7 @@
         element-loading-background="rgba(0, 0, 0, 0.8)"
         tooltip-effect="light"
         :max-height="maxHeight"
-        header-row-class-name="custom-table-header"
+        :header-row-class-name="setTableHeaderClass"
         v-bind="$attrs"
         v-on="$listeners"
         :default-expand-all="expandAll"
@@ -224,6 +224,12 @@ export default {
     }
   },
   methods: {
+    /**
+     * 设置table表头class
+     */
+    setTableHeaderClass(row){
+      return row.rowIndex === 2 ? 'hidden-custom-table-header' : 'custom-table-header'
+    },
     getTableHeight(){
       this.maxHeight = this.$refs.outerContainer.offsetHeight - this.$refs.toolbar.offsetHeight
     },
@@ -309,6 +315,10 @@ export default {
 
         .custom-hidden-column{
           display: none !important;
+        }
+
+        .el-table__header{
+
         }
       }
     }

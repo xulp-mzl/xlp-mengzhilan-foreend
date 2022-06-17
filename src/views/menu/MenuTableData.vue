@@ -187,12 +187,5 @@ export default {
 <style lang="less">
   .menu-table-data-container{
     height: 100%;
-    .table-toolbar{
-      height: 50px;
-      line-height: 50px;
-      overflow: hidden;
-      width: 100%;
-      box-sizing: border-box;
-    }
   }
 </style>

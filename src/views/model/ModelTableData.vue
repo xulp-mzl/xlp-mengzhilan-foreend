@@ -8,8 +8,14 @@
       :filter-into="filterInto"
       @search-data="filterData"
       @clear-data="resetData"
-      type="index"
+      type="selection"
       :row-option-width="350">
+
+      <template #tableToolbar>
+        <div class="table-toolbar">
+          <el-button type="primary" icon="el-icon-plus" plain size="small" @click="hideModel">隐藏模型</el-button>
+        </div>
+      </template>
 
       <template #rowOption="scope">
         <el-button @click.native.stop="deleteMenuItem(scope.row)" type="text" size="small" style="color: red;">删除</el-button>
@@ -83,6 +89,9 @@ export default {
         this.modelData = [...this.tempModelData]
       }
       this.loading = false
+    },
+    hideModel(){
+
     }
   },
   created(){

@@ -10,7 +10,7 @@
         element-loading-background="rgba(0, 0, 0, 0.8)"
         tooltip-effect="light"
         :max-height="maxHeight"
-        header-row-class-name="custom-table-header"
+        :header-row-class-name="setTableHeaderClass"
         v-bind="$attrs"
         v-on="$listeners"
         :default-expand-all="expandAll"
@@ -256,6 +256,12 @@ export default {
       for (let i = index; i < this.tableDataSource.length && i < endIndex; i++){
         this.tableData.push(this.tableDataSource[i])
       }
+    },
+    /**
+     * 设置table表头class
+     */
+    setTableHeaderClass(row){
+      return row.rowIndex === 2 ? 'hidden-custom-table-header' : 'custom-table-header'
     },
     getTableHeight(){
       // table最大高度 = 外层容器高度 - table工具栏高度 - 分页栏高度 - 分页栏margin-top值（10px）

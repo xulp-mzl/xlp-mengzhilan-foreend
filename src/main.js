@@ -9,6 +9,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import '@/css/public.css'
 import '@/css/common.less'
+import '@/css/platform.css'
 
 import '@/js/extVue.js'
 
