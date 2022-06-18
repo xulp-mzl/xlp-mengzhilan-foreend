@@ -5,7 +5,7 @@
 <script>
 
 import TableDataMixins from '@/components/mixins/table/TableDataMixins'
-import {filterTableData} from '@/js/tableFilterUtils'
+import {filterTableData, hasFilterCondition} from '@/js/tableFilterUtils'
 
 export default {
   name: 'PaginationTableDataMixins',
@@ -20,16 +20,22 @@ export default {
   },
   methods: {
     filterData(data){
-      this.filterTableData = filterTableData([...this.sourceTableData], data) || []
-      this.currentPage = 1
-      this.total = this.filterTableData.length
-      this.getTablePageData(this.currentPage, this.pageSize)
+      if (hasFilterCondition(this.tableData.length === 0 ? this.filterTableData : this.tableData, data)) {
+        console.log(12)
+        this.filterTableData = filterTableData([...this.sourceTableData], data) || []
+        this.currentPage = 1
+        this.total = this.filterTableData.length
+        this.getTablePageData(this.currentPage, this.pageSize)
+      }
     },
     resetData(data){
-      this.filterTableData = [...this.sourceTableData]
-      this.currentPage = 1
-      this.total = this.filterTableData.length
-      this.getTablePageData(this.currentPage, this.pageSize)
+      console.log(data)
+      if (hasFilterCondition(this.tableData.length === 0 ? this.filterTableData : this.tableData, data)) {
+        this.filterTableData = [...this.sourceTableData]
+        this.currentPage = 1
+        this.total = this.filterTableData.length
+        this.getTablePageData(this.currentPage, this.pageSize)
+      }
     },
     /**
      * 每页数据大小发生改变，调用该函数

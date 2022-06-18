@@ -237,8 +237,9 @@ export default {
       this.$emit('search-data', {...this.filterData})
     },
     clearData(){
+      const tempFilterData = this.filterData
       this.filterData = {...this.rawFilterData}
-      this.$emit('clear-data', {...this.filterData})
+      this.$emit('clear-data', tempFilterData)
     },
     getFilterData(){
       return {...this.filterData}

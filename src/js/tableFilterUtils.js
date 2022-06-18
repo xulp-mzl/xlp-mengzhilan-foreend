@@ -143,3 +143,21 @@ function findDataSuccess(filterData, filterFieldInfo, key){
 function isInstance(obj, objType) {
   return Object.prototype.toString.call(obj) === objType
 }
+
+export function hasFilterCondition(filterData, filterFieldInfo){
+  let hasCondition = false
+  if (filterData && filterData.length > 0){
+    const item = filterData[0]
+    for (const key in item){
+      const value = filterFieldInfo[key + '_start'] ||
+        filterFieldInfo[key + '_end'] || filterFieldInfo[key]
+      hasCondition = value !== undefined && value !== null && value !== ''
+      if (hasCondition && isInstance(value, '[object Array]') && value.length === 0){
+        hasCondition = false
+      }
+      // 假如有条件直接返回true
+      if (hasCondition) break
+    }
+  }
+  return hasCondition
+}

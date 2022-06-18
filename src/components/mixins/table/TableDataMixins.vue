@@ -4,7 +4,7 @@
 
 <script>
 
-import {filterTableTreeData} from '@/js/tableFilterUtils'
+import {filterTableTreeData, hasFilterCondition} from '@/js/tableFilterUtils'
 
 export default {
   name: 'TableDataMixins',
@@ -33,10 +33,14 @@ export default {
       this.tableTitle = tableTitle
     },
     filterData(data){
-      this.tableData = filterTableTreeData([...this.sourceTableData], data) || []
+      if (hasFilterCondition(this.tableData.length === 0 ? this.sourceTableData : this.tableData, data)){
+        this.tableData = filterTableTreeData([...this.sourceTableData], data) || []
+      }
     },
     resetData(data){
-      this.tableData = [...this.sourceTableData]
+      if (hasFilterCondition(this.tableData.length === 0 ? this.sourceTableData : this.tableData, data)) {
+        this.tableData = [...this.sourceTableData]
+      }
     }
   }
 }
