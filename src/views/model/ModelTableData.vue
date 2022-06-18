@@ -60,7 +60,7 @@ export default {
       filterInto: undefined,
       currentPage: 1,
       total: 8,
-      pageSize: 3
+      pageSize: 10
     }
   },
   methods: {

@@ -166,7 +166,7 @@
     <div class="pagination-container" ref="paginationFooter">
       <el-pagination
           background
-          layout="total, sizes, prev, pager, next, jumper"
+          :layout="pageLayout"
           :page-sizes="pageSizes"
           v-bind="$attrs"
           v-on="$listeners">
@@ -230,6 +230,10 @@ export default {
         return [10, 20, 50, 100, 200, 500]
       },
       type: Array
+    },
+    pageLayout: {
+      default: 'total, sizes, prev, pager, next, jumper',
+      type: String
     }
   },
   data(){
