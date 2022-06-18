@@ -1,7 +1,7 @@
 <template>
   <div class="menu-table-data-container">
     <common-border-table ref="tableData"
-       :data="menuData"
+       :data="tableData"
        v-loading="loading"
        :row-key="rowKeyName"
        @row-click="handleRowClick"
@@ -46,7 +46,7 @@ import util from '@/js/util'
 import EditMenuItemForm from '@/components/menu/EditMenuItemForm'
 import CommonBorderTable from '@/components/common/CommonBorderTable'
 import {tableTitle, filterInto} from '@/js/menu/menuItem'
-import {filterTableTreeData} from '@/js/tableFilterUtils'
+import TableDataMixins from '@/components/mixins/table/TableDataMixins'
 
 export default {
   name: 'MenuTableData',
@@ -54,33 +54,24 @@ export default {
     EditMenuItemForm,
     CommonBorderTable
   },
+  mixins: [TableDataMixins],
   data(){
     return {
-      menuData: [],
-      tempMenuData: [],
-      loading: false,
       selectedRowIndex: '',
       selectedRow: undefined,
       rowKeyName: 'id',
-      showCreateForm: false,
-      isRemoved: false,
-      edit: false,
-      tableTitle: undefined,
-      filterInto: undefined
+      edit: false
     }
   },
   methods: {
-    getElTable(){
-      return this.$refs.tableData.$refs.elTable
-    },
     async getMenuItemData(){
       this.loading = true
       const tableData = await getMenuItemData()
       if (tableData.errorMsg){
         this.$msgAlert(tableData.errorMsg, 'error')
       } else {
-        this.tempMenuData = tableData.data
-        this.menuData = [...this.tempMenuData]
+        this.sourceTableData = tableData.data
+        this.tableData = [...this.sourceTableData]
       }
       this.loading = false
     },
@@ -114,10 +105,6 @@ export default {
           this.getElTable().setCurrentRow(currentSelectedRow)
         }
       }
-    },
-    handleRemove(showCreateForm, isRemoved){
-      this.showCreateForm = showCreateForm
-      this.isRemoved = isRemoved
     },
     reloadData(reload){
       if (reload) {
@@ -165,21 +152,11 @@ export default {
         this.$tips('数据删除成功！')
         this.reloadData(true)
       }
-    },
-    filterData(data){
-      this.menuData = filterTableTreeData([...this.tempMenuData], data) || []
-    },
-    resetData(data){
-      this.menuData = [...this.tempMenuData]
-    },
-    initData(){
-      this.filterInto = filterInto
-      this.tableTitle = tableTitle
     }
   },
   created(){
     this.getMenuItemData()
-    this.initData()
+    this.initData(filterInto, tableTitle)
   }
 }
 </script>

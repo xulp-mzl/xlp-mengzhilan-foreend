@@ -168,6 +168,7 @@
           background
           :layout="pageLayout"
           :page-sizes="pageSizes"
+          @current-change="handleCurrentChange"
           v-bind="$attrs"
           v-on="$listeners">
         <slot></slot>
@@ -288,6 +289,14 @@ export default {
         this.filterData = {...newFilterData}
         this.rawFilterData = {...newFilterData}
       }
+    },
+    /**
+     * 数据当前页序号改变是，调用该方法
+     *
+     * @param val
+     */
+    handleCurrentChange(val){
+      this.$emit('current-page-change', val)
     }
   },
   created(){
