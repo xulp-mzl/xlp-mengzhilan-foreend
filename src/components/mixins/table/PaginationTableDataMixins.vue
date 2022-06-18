@@ -14,14 +14,12 @@ export default {
     return {
       currentPage: 1,
       total: 0,
-      pageSize: 10,
-      sizeChanged: false
+      pageSize: 10
     }
   },
   methods: {
     filterData(data){
       if (hasFilterCondition(this.tableData.length === 0 ? this.filterTableData : this.tableData, data)) {
-        console.log(12)
         this.filterTableData = filterTableData([...this.sourceTableData], data) || []
         this.currentPage = 1
         this.total = this.filterTableData.length
@@ -29,7 +27,6 @@ export default {
       }
     },
     resetData(data){
-      console.log(data)
       if (hasFilterCondition(this.tableData.length === 0 ? this.filterTableData : this.tableData, data)) {
         this.filterTableData = [...this.sourceTableData]
         this.currentPage = 1
@@ -43,9 +40,9 @@ export default {
      * @param val
      */
     handleSizeChange(val){
-      console.log(val, '-- handleSizeChange')
       this.pageSize = val
       this.getTablePageData(this.currentPage, val)
+      console.log(this.currentPage)
     },
     /**
      * 当前页序号发生改变，调用该方法
@@ -53,7 +50,6 @@ export default {
      * @param val
      */
     handleCurrentPageChange(val){
-      console.log(val, '-- handleCurrentChange')
       this.getTablePageData(val, this.pageSize)
     },
 
