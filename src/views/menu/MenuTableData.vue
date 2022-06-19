@@ -5,11 +5,11 @@
        v-loading="loading"
        :row-key="rowKeyName"
        @row-click="handleRowClick"
-      :table-title="tableTitle"
-      :filterable="true"
-      :filter-into="filterInto"
-      @search-data="filterData"
-      @clear-data="resetData">
+       :table-title="tableTitle"
+       :filterable="true"
+       :filter-into="filterInto"
+       @search-data="filterData"
+       @clear-data="resetData">
       <template #tableToolbar>
         <div class="table-toolbar">
           <el-button type="primary" icon="el-icon-plus" plain size="small" @click="createMenuItem">新建</el-button>

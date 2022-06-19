@@ -14,7 +14,9 @@ export default {
     return {
       currentPage: 1,
       total: 0,
-      pageSize: 10
+      pageSize: 10,
+      // 存储选择的数据
+      selections: []
     }
   },
   methods: {
@@ -42,7 +44,6 @@ export default {
     handleSizeChange(val){
       this.pageSize = val
       this.getTablePageData(this.currentPage, val)
-      console.log(this.currentPage)
     },
     /**
      * 当前页序号发生改变，调用该方法
@@ -67,6 +68,21 @@ export default {
       for (let i = index; i < this.filterTableData.length && i < endIndex; i++){
         this.tableData.push(this.filterTableData[i])
       }
+    },
+    /**
+     * 数据选择变化是调用该函数
+     * @param selection
+     */
+    handleSelectionChange(selection){
+      this.selections = selection
+    },
+    /**
+     * 点击谋行时，调用该函数，并只选中点击的那行
+     */
+    handleRowClick(row, column){
+      const elTable = this.getElTable()
+      elTable.clearSelection()
+      elTable.toggleRowSelection(row, true)
     }
   }
 }

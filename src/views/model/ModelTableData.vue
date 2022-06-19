@@ -1,21 +1,23 @@
 <template>
   <div class="model-table-data-container">
-    <common-border-table-with-page
+    <common-border-table-with-page ref="tableData"
      :data="tableData"
      v-loading="loading"
      :table-title="tableTitle"
      :filterable="true"
      :filter-into="filterInto"
-     @search-data="filterData"
-     @clear-data="resetData"
      type="selection"
      :row-option-width="350"
-     @size-change="handleSizeChange"
-     @current-page-change="handleCurrentPageChange"
      :current-page.sync="currentPage"
      :page-size="pageSize"
      :page-sizes="[2,4,8]"
-     :total="total">
+     :total="total"
+     @search-data="filterData"
+     @clear-data="resetData"
+     @size-change="handleSizeChange"
+     @current-page-change="handleCurrentPageChange"
+     @selection-change="handleSelectionChange"
+     @row-click="handleRowClick">
 
       <template #tableToolbar>
         <div class="table-toolbar">
@@ -79,6 +81,9 @@ export default {
       }
       this.loading = false
     },
+    /**
+     * 设置隐藏模型操作
+     */
     hideModel(){
 
     }

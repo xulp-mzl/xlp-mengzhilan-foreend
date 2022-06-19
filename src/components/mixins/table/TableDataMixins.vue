@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     getElTable(){
-      return this.$refs.tableData.$refs.elTable
+      return this.$refs.tableData?.$refs.elTable
     },
     handleRemove(showCreateForm, isRemoved){
       this.showCreateForm = showCreateForm
