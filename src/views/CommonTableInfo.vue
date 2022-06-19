@@ -186,14 +186,11 @@ export default {
     console.log(Number(1).toString())
     console.log(Object.prototype.toString.call(2))
     console.log(Object.prototype.toString.call(2.7))
-    const s = 'ww'
-    switch (s){
-      case 'ww':
-        console.log(123)
-        break
-      case 'www':
-        console.log(2333)
-    }
+    const params = new URLSearchParams({kk: 'dd'})
+    params.append('param1', '&value1')
+    params.append('param2', 'value2')
+    console.log(params)
+    console.log(params.toString())
   },
   mounted() {
     this.$nextTick(() => {

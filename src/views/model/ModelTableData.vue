@@ -42,7 +42,7 @@
 <script>
 
 import {tableTitle, filterInto} from '@/js/model/model'
-import {getModelData} from '@/js/api/model'
+import {getModelData, hideModels} from '@/js/api/model'
 import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWithPage'
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
 
@@ -85,7 +85,23 @@ export default {
      * 设置隐藏模型操作
      */
     hideModel(){
-
+      const selectionDataIds = []
+      this.selections.forEach((item) => {
+        selectionDataIds.push(item.beanId)
+      })
+      if (selectionDataIds.length === 0) {
+        this.$msgAlert('请选择要操作的数据！', 'error')
+        return
+      }
+      this._hideModel(selectionDataIds.join(','))
+    },
+    async _hideModel(selectionDataIds){
+      const response = await hideModels()
+      if (response.errorMsg){
+        this.$msgAlert(response.errorMsg, 'error')
+      } else {
+        this.getModelData()
+      }
     }
   },
   created(){
