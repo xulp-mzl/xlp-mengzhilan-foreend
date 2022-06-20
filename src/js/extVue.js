@@ -57,3 +57,22 @@ Vue.prototype.$myConfirm = function(msg, confirmCallbackFun, cancelCallbackFun) 
     }
   })
 }
+
+/**
+ * loading框
+ *
+ * @param msg 加载中提示类容 获取$loading的配置对象
+ */
+Vue.prototype.$appLoading = function(msg) {
+  if (this.$isInstance(msg, '[object Object]')){
+    return this.$loading(msg)
+  } else {
+    msg = msg || '数据处理中。。。'
+    return this.$loading({
+      lock: true,
+      text: msg,
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+  }
+}

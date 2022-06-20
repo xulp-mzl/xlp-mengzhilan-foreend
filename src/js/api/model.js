@@ -7,5 +7,5 @@ export function getModelData() {
 }
 
 export function hideModels(modelIds) {
-  return request.put(BASE_URL, new URLSearchParams({modelIds}))
+  return request.put(BASE_URL, null, {params: {modelIds}})
 }

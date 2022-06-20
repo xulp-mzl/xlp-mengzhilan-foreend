@@ -93,10 +93,12 @@ export default {
         this.$msgAlert('请选择要操作的数据！', 'error')
         return
       }
-      this._hideModel(selectionDataIds.join(','))
+      const appLoading = this.$appLoading()
+      this._hideModel(selectionDataIds.join(','), appLoading)
     },
-    async _hideModel(selectionDataIds){
-      const response = await hideModels()
+    async _hideModel(selectionDataIds, appLoading){
+      const response = await hideModels(selectionDataIds)
+      appLoading.close()
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
       } else {
