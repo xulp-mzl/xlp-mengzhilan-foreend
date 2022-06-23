@@ -5,28 +5,12 @@
     <template #body>
       <el-form :model="modelInfo" label-width="100px" ref="form" size="medium">
         <el-form-item label="模型名称："
-                      prop="title"
+                      prop="modelName"
                       :rules="[
-                { required: true, message: '菜单名称不能为空'},
+                { required: true, message: '模型名称不能为空'},
               ]"
         >
-          <el-input v-model="modelInfo.title" autocomplete="off" placeholder="请输菜单名称" class="custom-input"></el-input>
-        </el-form-item>
-
-        <el-form-item label="路由地址："
-                      prop="path">
-          <el-input v-model="modelInfo.path" autocomplete="off" placeholder="请输入路由地址" class="custom-input"></el-input>
-        </el-form-item>
-
-        <el-form-item label="图标类型：" prop="iconType">
-          <el-select v-model="modelInfo.iconType" placeholder="请选择图标类型">
-            <el-option label="" value=""></el-option>
-            <el-option label="element-ui" value="element-ui"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="图标描述：" prop="icon">
-          <el-input v-model="modelInfo.icon" autocomplete="off" placeholder="图标描述" class="custom-input"></el-input>
+          <el-input v-model.trim="modelInfo.modelName" autocomplete="off" placeholder="请输入模型名称" class="custom-input"></el-input>
         </el-form-item>
 
         <el-form-item

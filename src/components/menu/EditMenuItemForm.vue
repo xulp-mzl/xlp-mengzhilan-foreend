@@ -56,7 +56,7 @@ import {saveMenuItemData} from '@/js/api/menuItem'
 import FormMixins from '@/components/mixins/form/FormMixins'
 
 export default {
-  name: 'CreateMenuItemForm',
+  name: 'EditMenuItemForm',
   components: {
     CommonDialog
   },

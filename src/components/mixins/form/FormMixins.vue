@@ -15,6 +15,12 @@ export default {
     }
   },
   methods: {
+    /**
+     * 验证表单信息是否填全
+     *
+     * @param form
+     * @returns {boolean}
+     */
     validateForm(form){
       let success = form !== null && form !== undefined
       // eslint-disable-next-line no-unused-expressions

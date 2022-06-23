@@ -33,6 +33,8 @@
                          :edit="edit"
                          :parent-id="selectedRowIndex">
     </edit-menu-item-form>-->
+    <edit-model-form :visible="showCreateForm" @removed="handleRemove" v-if="!isRemoved">
+    </edit-model-form>
   </div>
 </template>
 
@@ -42,11 +44,13 @@ import {tableTitle, filterInto} from '@/js/model/model'
 import {getModelData, hideModels} from '@/js/api/model'
 import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWithPage'
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
+import EditModelForm from '@/components/model/EditModelForm'
 
 export default {
   name: 'MenuTableData',
   components: {
-    CommonBorderTableWithPage
+    CommonBorderTableWithPage,
+    EditModelForm
   },
   mixins: [PaginationTableDataMixins],
   data(){
