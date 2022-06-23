@@ -9,8 +9,6 @@
      type="selection"
      :row-option-width="350"
      :current-page.sync="currentPage"
-     :page-size="pageSize"
-     :page-sizes="[2,4,8]"
      :total="total"
      @search-data="filterData"
      @clear-data="resetData"
@@ -26,8 +24,7 @@
       </template>
 
       <template #rowOption="scope">
-        <el-button @click.native.stop="deleteMenuItem(scope.row)" type="text" size="small" style="color: red;">删除</el-button>
-        <el-button type="text" size="small" @click.native.stop="editMenuItem(scope.row)">编辑</el-button>
+        <el-button type="text" size="small" @click.native.stop="editModel(scope.row)">编辑</el-button>
       </template>
     </common-border-table-with-page>
 
@@ -54,8 +51,7 @@ export default {
   mixins: [PaginationTableDataMixins],
   data(){
     return {
-      edit: false,
-      pageSize: 4
+      edit: false
     }
   },
   methods: {

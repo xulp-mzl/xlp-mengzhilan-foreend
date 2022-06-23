@@ -53,17 +53,15 @@
 
 import CommonDialog from '@/components/common/CommonDialog'
 import {saveMenuItemData} from '@/js/api/menuItem'
+import FormMixins from '@/components/mixins/form/FormMixins'
 
 export default {
   name: 'CreateMenuItemForm',
   components: {
     CommonDialog
   },
+  mixins: [FormMixins],
   props: {
-    visible: {
-      default: false,
-      type: Boolean
-    },
     edit: {
       default: false,
       type: Boolean
@@ -97,13 +95,7 @@ export default {
       this.closeDialog()
     },
     saveAndEdit(){
-      let canSave = true
-      this.$refs.form.validate((valid) => {
-        if (!valid) {
-          canSave = false
-          return false
-        }
-      })
+      const canSave = this.validateForm(this.$refs.form)
       if (canSave){
         this.itemInfo.parentId = this.parentId
         this.disabled = true;
