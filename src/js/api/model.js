@@ -9,3 +9,7 @@ export function getModelData() {
 export function hideModels(modelIds) {
   return request.put(BASE_URL, null, {params: {modelIds}})
 }
+
+export function saveModel(model) {
+  return request.post(BASE_URL, model)
+}

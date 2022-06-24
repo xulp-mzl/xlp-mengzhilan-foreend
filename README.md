@@ -42,7 +42,7 @@ props: {
       },
       type: Array
     },
-    filterInto: {
+    filterInfo: {
      default: () => {
          return {
            prop: { // 字段名称

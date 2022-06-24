@@ -15,9 +15,9 @@ export default {
       filterTableData: [],
       loading: false,
       showCreateForm: false,
-      isRemoved: false,
+      isRemoved: true,
       tableTitle: undefined,
-      filterInto: undefined
+      filterInfo: undefined
     }
   },
   methods: {
@@ -28,8 +28,8 @@ export default {
       this.showCreateForm = showCreateForm
       this.isRemoved = isRemoved
     },
-    initData(filterInto, tableTitle){
-      this.filterInto = filterInto
+    initData(filterInfo, tableTitle){
+      this.filterInfo = filterInfo
       this.tableTitle = tableTitle
     },
     filterData(data){

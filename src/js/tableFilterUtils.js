@@ -161,3 +161,27 @@ export function hasFilterCondition(filterData, filterFieldInfo){
   }
   return hasCondition
 }
+
+export function getFieldFilterInfo(filterInfo){
+  const newFilterData = {}
+  if (filterInfo){
+    for (const key in filterInfo){
+      if (filterInfo[key].propType === 'datetime' ||
+        filterInfo[key].propType === 'date' ||
+        filterInfo[key].propType === 'time'){
+        newFilterData[key + '_start'] = isInstance(filterInfo[key].defaultValue, '[object Date]')
+          ? filterInfo[key].defaultValue : undefined
+        newFilterData[key + '_end'] = undefined
+      } else if (filterInfo[key].propType === 'multSelect'){
+        newFilterData[key] = isInstance(filterInfo[key].defaultValue, '[object Array]')
+          ? filterInfo[key].defaultValue : undefined
+      } else {
+        newFilterData[key] = filterInfo[key].defaultValue === undefined
+          ? '' : filterInfo[key].defaultValue
+        newFilterData[key + '_option'] = filterInfo[key].optionType
+      }
+      newFilterData[key + '_type'] = filterInfo[key].propType
+    }
+    return newFilterData
+  }
+}

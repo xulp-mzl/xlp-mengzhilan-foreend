@@ -70,18 +70,18 @@
              label-class-name="custom-column"
              :type="item.treeNode === true ? undefined : ''"
              :resizable="false">
-            <template #header v-if="typeof filterInto[item.prop] === 'object'">
-              <slot :name="item.prop + 'Header'" v-if="filterInto[item.prop].slot === true"></slot>
+            <template #header v-if="typeof filterInfo[item.prop] === 'object'">
+              <slot :name="item.prop + 'Header'" v-if="filterInfo[item.prop].slot === true"></slot>
               <!--下拉选择框-->
-              <el-select v-if="filterInto[item.prop].propType === 'select' || filterInto[item.prop].propType === 'multSelect'"
+              <el-select v-if="filterInfo[item.prop].propType === 'select' || filterInfo[item.prop].propType === 'multSelect'"
                  v-model="filterData[item.prop]"
-                 :placeholder="filterInto[item.prop].placeholder"
+                 :placeholder="filterInfo[item.prop].placeholder"
                  size="mini" collapse-tags clearable
-                 :multiple="filterInto[item.prop].propType === 'multSelect'"
+                 :multiple="filterInfo[item.prop].propType === 'multSelect'"
                  style="width: 100%;">
-                <template v-if="typeof filterInto[item.prop].value === 'object'">
+                <template v-if="typeof filterInfo[item.prop].value === 'object'">
                   <el-option
-                      v-for="option in filterInto[item.prop].value"
+                      v-for="option in filterInfo[item.prop].value"
                       :key="option.value"
                       :label="option.label"
                       :value="option.value" >
@@ -90,12 +90,12 @@
               </el-select>
 
               <!--日期时间选择器-->
-              <el-row :gutter="5" v-else-if="filterInto[item.prop].propType === 'datetime' || filterInto[item.prop].propType === 'date'">
+              <el-row :gutter="5" v-else-if="filterInfo[item.prop].propType === 'datetime' || filterInfo[item.prop].propType === 'date'">
                 <el-col :span="11">
                   <el-date-picker size="mini" style="width: 100%;" v-model="filterData[item.prop + '_start']"
-                                  :type="filterInto[item.prop].propType"
+                                  :type="filterInfo[item.prop].propType"
                                   placeholder="选择开始时间"
-                                  :default-value="$isInstance(filterInto[item.prop].defaultValue, '[object Date]') ? filterInto[item.prop].defaultValue : undefined">
+                                  :default-value="$isInstance(filterInfo[item.prop].defaultValue, '[object Date]') ? filterInfo[item.prop].defaultValue : undefined">
                   </el-date-picker>
                 </el-col>
                 <el-col :span="2" style="text-align: center;">
@@ -103,18 +103,18 @@
                 </el-col>
                 <el-col :span="11">
                   <el-date-picker size="mini" style="width: 100%;" v-model="filterData[item.prop + '_end']"
-                                  :type="filterInto[item.prop].propType"
+                                  :type="filterInfo[item.prop].propType"
                                   placeholder="选择结束时间">
                   </el-date-picker>
                 </el-col>
               </el-row>
 
               <!--时间选择器-->
-              <el-row :gutter="5" v-else-if="filterInto[item.prop].propType === 'time'">
+              <el-row :gutter="5" v-else-if="filterInfo[item.prop].propType === 'time'">
                 <el-col :span="11">
                   <el-time-picker size="mini" style="width: 100%;" v-model="filterData[item.prop + '_start']"
                                   placeholder="选择开始时间"
-                                  :default-value="$isInstance(filterInto[item.prop].defaultValue, '[object Date]') ? filterInto[item.prop].defaultValue : undefined">
+                                  :default-value="$isInstance(filterInfo[item.prop].defaultValue, '[object Date]') ? filterInfo[item.prop].defaultValue : undefined">
                   </el-time-picker>
                 </el-col>
                 <el-col :span="2" style="text-align: center;">
@@ -128,7 +128,7 @@
               </el-row>
 
               <!-- 普通输入框  -->
-              <el-input v-else :placeholder="filterInto[item.prop].placeholder" size="mini"
+              <el-input v-else :placeholder="filterInfo[item.prop].placeholder" size="mini"
                         v-model="filterData[item.prop]">
               </el-input>
             </template>
@@ -168,6 +168,8 @@
 
 <script>
 
+import {getFieldFilterInfo} from '@/js/tableFilterUtils'
+
 export default {
   name: 'CommonBorderTable',
   props: {
@@ -177,7 +179,7 @@ export default {
       },
       type: Array
     },
-    filterInto: {
+    filterInfo: {
       default: () => {},
       type: Object
     },
@@ -245,25 +247,8 @@ export default {
       return {...this.filterData}
     },
     initFilterData(){
-      if (this.filterInto){
-        const newFilterData = {}
-        for (const key in this.filterInto){
-          if (this.filterInto[key].propType === 'datetime' ||
-            this.filterInto[key].propType === 'date' ||
-            this.filterInto[key].propType === 'time'){
-            newFilterData[key + '_start'] = this.$isInstance(this.filterInto[key].defaultValue, '[object Date]')
-              ? this.filterInto[key].defaultValue : undefined
-            newFilterData[key + '_end'] = undefined
-          } else if (this.filterInto[key].propType === 'multSelect'){
-            newFilterData[key] = this.$isInstance(this.filterInto[key].defaultValue, '[object Array]')
-              ? this.filterInto[key].defaultValue : undefined
-          } else {
-            newFilterData[key] = this.filterInto[key].defaultValue === undefined
-              ? '' : this.filterInto[key].defaultValue
-            newFilterData[key + '_option'] = this.filterInto[key].optionType
-          }
-          newFilterData[key + '_type'] = this.filterInto[key].propType
-        }
+      if (this.filterInfo){
+        const newFilterData = getFieldFilterInfo(this.filterInfo) || {}
         this.filterData = {...newFilterData}
         this.rawFilterData = {...newFilterData}
       }

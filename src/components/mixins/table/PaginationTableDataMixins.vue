@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     filterData(data){
-      if (hasFilterCondition(this.tableData.length === 0 ? this.filterTableData : this.tableData, data)) {
+      if (hasFilterCondition(this.tableData.length === 0 ? this.sourceTableData : this.tableData, data)) {
         this.filterTableData = filterTableData([...this.sourceTableData], data) || []
         this.currentPage = 1
         this.total = this.filterTableData.length
@@ -29,7 +29,7 @@ export default {
       }
     },
     resetData(data){
-      if (hasFilterCondition(this.tableData.length === 0 ? this.filterTableData : this.tableData, data)) {
+      if (hasFilterCondition(this.tableData.length === 0 ? this.sourceTableData : this.tableData, data)) {
         this.filterTableData = [...this.sourceTableData]
         this.currentPage = 1
         this.total = this.filterTableData.length
@@ -79,7 +79,7 @@ export default {
     /**
      * 点击谋行时，调用该函数，并只选中点击的那行
      */
-    handleRowClick(row, column){
+    handleRowClick(row){
       const elTable = this.getElTable()
       elTable.clearSelection()
       elTable.toggleRowSelection(row, true)

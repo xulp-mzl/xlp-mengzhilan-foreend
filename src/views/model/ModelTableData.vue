@@ -5,7 +5,7 @@
      v-loading="loading"
      :table-title="tableTitle"
      :filterable="true"
-     :filter-into="filterInto"
+     :filter-info="filterInfo"
      type="selection"
      :row-option-width="350"
      :current-page.sync="currentPage"
@@ -28,23 +28,25 @@
       </template>
     </common-border-table-with-page>
 
-   <!-- <edit-menu-item-form :visible="showCreateForm" @removed="handleRemove" v-if="!isRemoved"
-                         @reload-parent-table="reloadData" :item-info="edit ? selectedRow : undefined"
-                         :edit="edit"
-                         :parent-id="selectedRowIndex">
-    </edit-menu-item-form>-->
-    <edit-model-form :visible="showCreateForm" @removed="handleRemove" v-if="!isRemoved">
+    <edit-model-form
+        :visible="showCreateForm"
+        :model-info="selection"
+         @removed="handleRemove"
+         @reload-parent-table="getModelData"
+         v-if="!isRemoved && optionBtn"
+      >
     </edit-model-form>
   </div>
 </template>
 
 <script>
 
-import {tableTitle, filterInto} from '@/js/model/model'
+import {tableTitle, filterInfo} from '@/js/model/model'
 import {getModelData, hideModels} from '@/js/api/model'
 import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWithPage'
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
 import EditModelForm from '@/components/model/EditModelForm'
+import {filterTableData, getFieldFilterInfo} from '@/js/tableFilterUtils'
 
 export default {
   name: 'MenuTableData',
@@ -55,18 +57,20 @@ export default {
   mixins: [PaginationTableDataMixins],
   data(){
     return {
-      edit: false
+      optionBtn: 1,
+      selection: undefined
     }
   },
   methods: {
-    reloadData(reload){
-      if (reload) {
-        // this.$router.go(0)
-        this.$store.commit('setReloadCurrentPage', false)
-        this.$nextTick(() => {
-          this.$store.commit('setReloadCurrentPage', true)
-        })
-      }
+    /**
+     * 编辑菜单条目
+     * @param row
+     */
+    editModel(row){
+      this.optionBtn = 1
+      this.handleRowClick(row)
+      this.selection = row
+      this.handleRemove(true, false)
     },
     async getModelData(){
       this.loading = true
@@ -75,7 +79,7 @@ export default {
         this.$msgAlert(tableData.errorMsg, 'error')
       } else {
         this.sourceTableData = tableData.data
-        this.filterTableData = [...this.sourceTableData]
+        this.filterTableData = filterTableData([...this.sourceTableData], getFieldFilterInfo(filterInfo))
         this.total = this.filterTableData.length
         this.getTablePageData(this.currentPage, this.pageSize)
       }
@@ -107,7 +111,7 @@ export default {
     }
   },
   created(){
-    this.initData(filterInto, tableTitle)
+    this.initData(filterInfo, tableTitle)
     this.getModelData()
   }
 }

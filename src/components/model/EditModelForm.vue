@@ -37,6 +37,7 @@
 
 import CommonDialog from '@/components/common/CommonDialog'
 import FormMixins from '@/components/mixins/form/FormMixins'
+import {saveModel} from '@/js/api/model'
 
 export default {
   name: 'EditModelForm',
@@ -72,10 +73,21 @@ export default {
     save(){
       const canSave = this.validateForm(this.$refs.form)
       if (canSave){
-
+        this._save()
       } else {
         this.$msgAlert('请按要求填好表格数据后，再提交！', 'error')
       }
+    },
+    async _save(){
+      this.disabled = true
+      const response = await saveModel(this.modelInfo)
+      if (response.errorMsg){
+        this.$msgAlert(response.errorMsg, 'error')
+      } else {
+        this.closeDialog()
+        this.$tips('数据修改成功！')
+      }
+      this.disabled = false
     },
     closeDialog(){
       this.$emit('removed', !this.visible, true)

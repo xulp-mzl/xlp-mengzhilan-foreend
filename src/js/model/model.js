@@ -17,7 +17,7 @@ export const tableTitle = [
   }
 ]
 
-export const filterInto = {
+export const filterInfo = {
   beanName: {
   },
   beanId: {

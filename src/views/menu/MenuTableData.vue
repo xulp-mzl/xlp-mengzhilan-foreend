@@ -7,7 +7,7 @@
        @row-click="handleRowClick"
        :table-title="tableTitle"
        :filterable="true"
-       :filter-into="filterInto"
+       :filter-info="filterInfo"
        @search-data="filterData"
        @clear-data="resetData">
       <template #tableToolbar>
@@ -45,7 +45,7 @@ import {getMenuItemData, deleteMenuItem} from '@/js/api/menuItem'
 import util from '@/js/util'
 import EditMenuItemForm from '@/components/menu/EditMenuItemForm'
 import CommonBorderTable from '@/components/common/CommonBorderTable'
-import {tableTitle, filterInto} from '@/js/menu/menuItem'
+import {tableTitle, filterInfo} from '@/js/menu/menuItem'
 import TableDataMixins from '@/components/mixins/table/TableDataMixins'
 
 export default {
@@ -156,7 +156,7 @@ export default {
   },
   created(){
     this.getMenuItemData()
-    this.initData(filterInto, tableTitle)
+    this.initData(filterInfo, tableTitle)
   }
 }
 </script>

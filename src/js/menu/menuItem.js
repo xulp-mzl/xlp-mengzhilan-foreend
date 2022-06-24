@@ -35,7 +35,7 @@ export const tableTitle = [
   }
 ]
 
-export const filterInto = {
+export const filterInfo = {
   iconType: {
     propType: 'multSelect', // 字段类型，用来创建搜索框的类型
     value: [{label: 'element-ui', value: 'element-ui'}] // 过滤框为下拉选择框时，输入值[label: 显示文本, value: 值]
