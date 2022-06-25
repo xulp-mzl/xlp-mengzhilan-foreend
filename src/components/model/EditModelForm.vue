@@ -5,20 +5,20 @@
     <template #body>
       <el-form :model="modelInfo" label-width="100px" ref="form" size="medium">
         <el-form-item label="模型名称："
-                      prop="modelName"
+                      prop="beanName"
                       :rules="[
                 { required: true, message: '模型名称不能为空'},
               ]"
         >
-          <el-input v-model.trim="modelInfo.modelName" autocomplete="off" placeholder="请输入模型名称" class="custom-input"></el-input>
+          <el-input v-model.trim="modelInfo.beanName" autocomplete="off" placeholder="请输入模型名称" class="custom-input"></el-input>
         </el-form-item>
 
         <el-form-item
             label="排序号："
-            prop="weight"
+            prop="orderNo"
             :rules="[{ type: 'number', message: '排序号必须为数字值'}]"
         >
-          <el-input v-model.number="modelInfo.weight" autocomplete="off" class="custom-input" ></el-input>
+          <el-input v-model.number="modelInfo.orderNo" autocomplete="off" class="custom-input" ></el-input>
         </el-form-item>
       </el-form>
     </template>
@@ -53,9 +53,9 @@ export default {
     modelInfo: {
       default: () => {
         return {
-          modelId: null,
-          modelName: '',
-          weight: 0
+          beanId: null,
+          beanName: '',
+          orderNo: 0
         }
       },
       type: Object
@@ -84,6 +84,8 @@ export default {
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
       } else {
+        // 刷新表格数据
+        this.$emit('reload-parent-table', true)
         this.closeDialog()
         this.$tips('数据修改成功！')
       }
@@ -95,6 +97,9 @@ export default {
     resetForm(){
       this.$refs.form.resetFields()
     }
+  },
+  created(){
+    console.log(this.modelInfo)
   }
 }
 </script>

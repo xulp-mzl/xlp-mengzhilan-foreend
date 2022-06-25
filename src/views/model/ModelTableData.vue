@@ -46,7 +46,7 @@ import {getModelData, hideModels} from '@/js/api/model'
 import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWithPage'
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
 import EditModelForm from '@/components/model/EditModelForm'
-import {filterTableData, getFieldFilterInfo} from '@/js/tableFilterUtils'
+// import {filterTableData, getFieldFilterInfo} from '@/js/tableFilterUtils'
 
 export default {
   name: 'MenuTableData',
@@ -67,9 +67,9 @@ export default {
      * @param row
      */
     editModel(row){
-      this.optionBtn = 1
       this.handleRowClick(row)
       this.selection = row
+      this.optionBtn = 1
       this.handleRemove(true, false)
     },
     async getModelData(){
@@ -79,7 +79,8 @@ export default {
         this.$msgAlert(tableData.errorMsg, 'error')
       } else {
         this.sourceTableData = tableData.data
-        this.filterTableData = filterTableData([...this.sourceTableData], getFieldFilterInfo(filterInfo))
+        // this.filterTableData = filterTableData([...this.sourceTableData], getFieldFilterInfo(filterInfo))
+        this.filterTableData = [...this.sourceTableData]
         this.total = this.filterTableData.length
         this.getTablePageData(this.currentPage, this.pageSize)
       }
