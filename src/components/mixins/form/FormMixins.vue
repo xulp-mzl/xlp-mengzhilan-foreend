@@ -42,9 +42,12 @@ export default {
       .custom-input{
         .el-input__inner{
           width: 60%;
-        }
+         }
       }
       .el-select--medium{
+        width: 60%;
+      }
+      .el-input-group--append{
         width: 60%;
       }
     }

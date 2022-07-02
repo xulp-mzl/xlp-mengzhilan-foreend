@@ -46,10 +46,6 @@ export default {
   },
   mixins: [FormMixins],
   props: {
-    edit: {
-      default: false,
-      type: Boolean
-    },
     modelInfo: {
       default: () => {
         return {
@@ -97,9 +93,6 @@ export default {
     resetForm(){
       this.$refs.form.resetFields()
     }
-  },
-  created(){
-    console.log(this.modelInfo)
   }
 }
 </script>

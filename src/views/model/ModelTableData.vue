@@ -7,7 +7,7 @@
      :filterable="true"
      :filter-info="filterInfo"
      type="selection"
-     :row-option-width="350"
+     :row-option-width="450"
      :current-page.sync="currentPage"
      :total="total"
      @search-data="filterData"
@@ -25,6 +25,7 @@
 
       <template #rowOption="scope">
         <el-button type="text" size="small" @click.native.stop="editModel(scope.row)">编辑</el-button>
+        <el-button type="text" size="small" @click.native.stop="baseInfoConfig(scope.row)">配置基本信息</el-button>
       </template>
     </common-border-table-with-page>
 
@@ -33,9 +34,16 @@
         :model-info="selection"
          @removed="handleRemove"
          @reload-parent-table="getModelData"
-         v-if="!isRemoved && optionBtn"
+         v-if="!isRemoved && optionBtn === 1"
       >
     </edit-model-form>
+
+    <edit-model-config-form
+        :visible="showCreateForm"
+        :model-id="modelId"
+        @removed="handleRemove"
+        v-if="!isRemoved && optionBtn === 2">
+    </edit-model-config-form>
   </div>
 </template>
 
@@ -46,19 +54,22 @@ import {getModelData, hideModels} from '@/js/api/model'
 import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWithPage'
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
 import EditModelForm from '@/components/model/EditModelForm'
+import EditModelConfigForm from '@/components/model/EditModelConfigForm'
 // import {filterTableData, getFieldFilterInfo} from '@/js/tableFilterUtils'
 
 export default {
   name: 'MenuTableData',
   components: {
     CommonBorderTableWithPage,
-    EditModelForm
+    EditModelForm,
+    EditModelConfigForm
   },
   mixins: [PaginationTableDataMixins],
   data(){
     return {
       optionBtn: 1,
-      selection: undefined
+      selection: undefined,
+      modelId: ''
     }
   },
   methods: {
@@ -109,6 +120,16 @@ export default {
       } else {
         this.getModelData()
       }
+    },
+    /**
+     * 基本信息配置
+     * @param row
+     */
+    baseInfoConfig(row){
+      this.handleRowClick(row)
+      this.optionBtn = 2
+      this.modelId = row.beanId
+      this.handleRemove(true, false)
     }
   },
   created(){
