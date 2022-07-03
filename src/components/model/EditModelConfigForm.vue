@@ -61,7 +61,7 @@
       <div class="dialog-footer" style="padding-right: 20%;">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button type="primary" @click="save" :disabled="disabled">保存</el-button>
-        <el-button type="info" @click="resetForm">重置</el-button>
+        <el-button type="info" @click="resetForm($refs.form)">重置</el-button>
       </div>
     </template>
   </common-dialog>
@@ -71,7 +71,7 @@
 
 import CommonDialog from '@/components/common/CommonDialog'
 import FormMixins from '@/components/mixins/form/FormMixins'
-import {saveModel} from '@/js/api/model'
+import {saveBaseInfo} from '@/js/api/modelConfig'
 import RuleValidation from '@/components/mixins/rules/RuleValidation'
 
 export default {
@@ -114,9 +114,6 @@ export default {
     }
   },
   methods: {
-    handleBeforeClose(){
-      this.closeDialog()
-    },
     save(){
       const canSave = this.validateForm(this.$refs.form)
       if (canSave){
@@ -127,12 +124,12 @@ export default {
     },
     async _save(){
       this.disabled = true
-      const response = await saveModel(this.modelInfo)
+      this.modelConfig.modelId = this.modelId
+      const response = await saveBaseInfo(this.modelConfig)
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
       } else {
         // 刷新表格数据
-        this.$emit('reload-parent-table', true)
         this.closeDialog()
         this.$tips('数据修改成功！')
       }

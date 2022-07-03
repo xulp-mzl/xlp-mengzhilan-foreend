@@ -63,9 +63,6 @@ export default {
     }
   },
   methods: {
-    handleBeforeClose(){
-      this.closeDialog()
-    },
     save(){
       const canSave = this.validateForm(this.$refs.form)
       if (canSave){

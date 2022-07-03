@@ -46,6 +46,12 @@ export default {
       if (elForm) {
         elForm.resetFields()
       }
+    },
+    /**
+     * 点击关闭按钮，执行的函数
+     */
+    handleBeforeClose(){
+      this.closeDialog()
     }
   }
 }
