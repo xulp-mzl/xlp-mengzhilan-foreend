@@ -1,5 +1,5 @@
 <template>
-  <common-dialog title="基本操作信息配置" :visible.sync="visible"
+  <common-dialog dialog-title="基本操作信息配置" :visible.sync="visible"
                  :before-close="handleBeforeClose">
 
     <template #body>
@@ -25,7 +25,12 @@
         <el-form-item label="表单宽度：" prop="formWidth"
                       :rules="[validateInt('表单宽度必须是正整数')]">
           <el-input v-model.number="modelConfig.formWidth" autocomplete="off">
-            <template slot="append">px</template>
+            <template slot="append">
+              <el-select v-model="formWidthUnit" >
+                <el-option label="px" value="px"></el-option>
+                <el-option label="%" value="%"></el-option>
+              </el-select>
+            </template>
           </el-input>
         </el-form-item>
 
@@ -91,14 +96,14 @@ export default {
       disabled: false,
       modelConfig: {
         filterable: false,
-        firstColumnType: '',
+        firstColumnType: 'none',
         formWidth: null,
         fullscreen: false,
         splitColumnCount: 1,
         formItemLabelWidth: 100
       },
       firstColumnTypes: [
-        {value: '', label: '无'},
+        {value: 'none', label: '无'},
         {value: 'index', label: 'index'},
         {value: 'selection', label: 'selection'}
       ],
@@ -110,7 +115,8 @@ export default {
         {value: 6, label: '6'},
         {value: 8, label: '8'},
         {value: 12, label: '12'}
-      ]
+      ],
+      formWidthUnit: 'px'
     }
   },
   methods: {
@@ -129,7 +135,6 @@ export default {
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
       } else {
-        // 刷新表格数据
         this.closeDialog()
         this.$tips('数据修改成功！')
       }

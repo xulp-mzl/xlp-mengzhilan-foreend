@@ -1,5 +1,5 @@
 <template>
-  <common-dialog title="编辑模型信息" :visible.sync="visible"
+  <common-dialog  dialog-title="编辑模型信息" :visible.sync="visible"
                  :before-close="handleBeforeClose">
 
     <template #body>

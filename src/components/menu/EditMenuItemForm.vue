@@ -1,5 +1,5 @@
 <template>
-  <common-dialog :title="edit ? '编辑菜单' : '新建菜单'" :visible.sync="visible"
+  <common-dialog :dialog-title="edit ? '编辑菜单' : '新建菜单'" :visible.sync="visible"
         :before-close="handleBeforeClose">
 
     <template #body>

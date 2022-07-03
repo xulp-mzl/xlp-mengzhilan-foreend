@@ -2,7 +2,8 @@
   <el-dialog v-bind="$attrs"
              :close-on-click-modal="false"
              :close-on-press-escape="false"
-             v-on="$listeners">
+             v-on="$listeners"
+             :title="dialogTitle">
     <template #title>
       <slot name="title"></slot>
     </template>
@@ -17,7 +18,13 @@
 
 <script>
 export default {
-  name: 'CommonDialog'
+  name: 'CommonDialog',
+  props: {
+    dialogTitle: {
+      default: '',
+      type: String
+    }
+  }
 }
 </script>
 
