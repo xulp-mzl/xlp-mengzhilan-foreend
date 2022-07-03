@@ -24,10 +24,36 @@
 
         <el-form-item label="表单宽度：" prop="formWidth"
                       :rules="[validateInt('表单宽度必须是正整数')]">
-          <el-input v-model.number="modelConfig.formWidth" autocomplete="off" clearable>
+          <el-input v-model.number="modelConfig.formWidth" autocomplete="off">
             <template slot="append">px</template>
           </el-input>
         </el-form-item>
+
+        <el-form-item label="表单宽度是否全屏：" prop="fullscreen">
+          <el-radio-group v-model="modelConfig.fullscreen">
+            <el-radio :label="true">是</el-radio>
+            <el-radio :label="false">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="表单拆分列数：" prop="splitColumnCount">
+          <el-select v-model="modelConfig.splitColumnCount" >
+            <el-option
+                v-for="item in splitColumnCountData"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="表单描述宽度：" prop="formItemLabelWidth"
+                      :rules="[validateInt('表单描述宽度必须是正整数')]">
+          <el-input v-model.number="modelConfig.formItemLabelWidth" autocomplete="off">
+            <template slot="append">px</template>
+          </el-input>
+        </el-form-item>
+
       </el-form>
     </template>
 
@@ -75,6 +101,15 @@ export default {
         {value: '', label: '无'},
         {value: 'index', label: 'index'},
         {value: 'selection', label: 'selection'}
+      ],
+      splitColumnCountData: [
+        {value: 1, label: '1'},
+        {value: 2, label: '2'},
+        {value: 3, label: '3'},
+        {value: 4, label: '4'},
+        {value: 6, label: '6'},
+        {value: 8, label: '8'},
+        {value: 12, label: '12'}
       ]
     }
   },
@@ -102,12 +137,6 @@ export default {
         this.$tips('数据修改成功！')
       }
       this.disabled = false
-    },
-    closeDialog(){
-      this.$emit('removed', !this.visible, true)
-    },
-    resetForm(){
-      this.$refs.form.resetFields()
     }
   }
 }

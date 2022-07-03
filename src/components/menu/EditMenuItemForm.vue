@@ -43,7 +43,7 @@
       <div class="dialog-footer" style="padding-right: 20%;">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button type="primary" @click="saveAndEdit" :disabled="disabled">保存</el-button>
-        <el-button type="info" @click="resetForm">重置</el-button>
+        <el-button type="info" @click="resetForm($refs.form)">重置</el-button>
       </div>
     </template>
   </common-dialog>
@@ -113,12 +113,6 @@ export default {
       } else {
         this.$msgAlert('请按要求填好表格数据后，再提交！', 'error')
       }
-    },
-    closeDialog(){
-      this.$emit('removed', !this.visible, true)
-    },
-    resetForm(){
-      this.$refs.form.resetFields()
     }
   }
 }

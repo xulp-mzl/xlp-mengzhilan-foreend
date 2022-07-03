@@ -31,6 +31,21 @@ export default {
         }
       })
       return success
+    },
+    /**
+     * 关闭表单
+     */
+    closeDialog(){
+      this.$emit('removed', !this.visible, true)
+    },
+    /**
+     * 重置表单
+     * @param elForm
+     */
+    resetForm(elForm){
+      if (elForm) {
+        elForm.resetFields()
+      }
     }
   }
 }
