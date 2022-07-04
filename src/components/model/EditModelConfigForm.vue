@@ -26,10 +26,9 @@
                       :rules="[validateInt('表单宽度必须是正整数')]">
           <el-input v-model.number="modelConfig.formWidth" autocomplete="off">
             <template slot="append">
-              <el-select v-model="formWidthUnit" >
-                <el-option label="px" value="px"></el-option>
-                <el-option label="%" value="%"></el-option>
-              </el-select>
+              <el-tooltip content="点击切换单位" placement="top" effect="light">
+                <el-button @click="changeWidthUnit(formWidthUnit, 'formWidth')">{{formWidthUnit}}</el-button>
+              </el-tooltip>
             </template>
           </el-input>
         </el-form-item>
@@ -55,7 +54,11 @@
         <el-form-item label="表单描述宽度：" prop="formItemLabelWidth"
                       :rules="[validateInt('表单描述宽度必须是正整数')]">
           <el-input v-model.number="modelConfig.formItemLabelWidth" autocomplete="off">
-            <template slot="append">px</template>
+            <template slot="append">
+              <el-tooltip content="点击切换单位" placement="top" effect="light">
+                <el-button @click="changeWidthUnit(formItemLabelWidthUnit, 'formItemLabelWidth')">{{formItemLabelWidthUnit}}</el-button>
+              </el-tooltip>
+            </template>
           </el-input>
         </el-form-item>
 
@@ -116,7 +119,8 @@ export default {
         {value: 8, label: '8'},
         {value: 12, label: '12'}
       ],
-      formWidthUnit: 'px'
+      formWidthUnit: 'px',
+      formItemLabelWidthUnit: 'px'
     }
   },
   methods: {
@@ -139,6 +143,26 @@ export default {
         this.$tips('数据修改成功！')
       }
       this.disabled = false
+    },
+    /**
+     * 单位改变
+     * @param unit
+     * @param prop
+     */
+    changeWidthUnit(unit, prop){
+      if (prop === 'formWidth'){
+        if (unit === 'px'){
+          this.formWidthUnit = '%'
+        } else {
+          this.formWidthUnit = 'px'
+        }
+      } else {
+        if (unit === 'px'){
+          this.formItemLabelWidthUnit = '%'
+        } else {
+          this.formItemLabelWidthUnit = 'px'
+        }
+      }
     }
   }
 }
