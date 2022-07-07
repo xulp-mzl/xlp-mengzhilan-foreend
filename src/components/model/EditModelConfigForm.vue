@@ -79,7 +79,7 @@
 
 import CommonDialog from '@/components/common/CommonDialog'
 import FormMixins from '@/components/mixins/form/FormMixins'
-import {saveBaseInfo} from '@/js/api/modelConfig'
+import {saveBaseInfo, getBaseConfigInfo} from '@/js/api/modelConfig'
 import RuleValidation from '@/components/mixins/rules/RuleValidation'
 
 export default {
@@ -134,8 +134,17 @@ export default {
     },
     async _save(){
       this.disabled = true
-      this.modelConfig.modelId = this.modelId
-      const response = await saveBaseInfo(this.modelConfig)
+      const sendData = {...this.modelConfig}
+      sendData.modelId = this.modelId
+      let value = sendData.formWidth
+      if (value && value > 0){
+        sendData.formWidth = sendData.formWidth + this.formWidthUnit
+      }
+      value = sendData.formItemLabelWidth
+      if (value && value > 0){
+        sendData.formItemLabelWidth = sendData.formItemLabelWidth + this.formItemLabelWidthUnit
+      }
+      const response = await saveBaseInfo(sendData)
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
       } else {
@@ -151,19 +160,56 @@ export default {
      */
     changeWidthUnit(unit, prop){
       if (prop === 'formWidth'){
-        if (unit === 'px'){
-          this.formWidthUnit = '%'
-        } else {
-          this.formWidthUnit = 'px'
-        }
+        this.formWidthUnit = this._getChangedUnit(unit)
       } else {
-        if (unit === 'px'){
-          this.formItemLabelWidthUnit = '%'
-        } else {
-          this.formItemLabelWidthUnit = 'px'
+        this.formItemLabelWidthUnit = this._getChangedUnit(unit)
+      }
+    },
+    _getChangedUnit(unit){
+      return unit === 'px' ? '%' : 'px'
+    },
+    /**
+     * 获取基本信息
+     * @returns {Promise<void>}
+     */
+    async getBaseConfigInfo(){
+      const response = await getBaseConfigInfo(this.modelId)
+      if (response.errorMsg){
+        this.$msgAlert(response.errorMsg, 'error')
+      } else {
+        const data = response.data
+        if (data && typeof data === 'object'){
+          for (const key in this.modelConfig){
+            if (key === 'formWidth'){
+              const countAndUnit = this._getCountAndUnit(data[key])
+              if (countAndUnit.length > 0){
+                this.modelConfig[key] = countAndUnit[1]
+                this.formWidthUnit = countAndUnit[0]
+              }
+            } else if (key === 'formItemLabelWidth'){
+              const countAndUnit = this._getCountAndUnit(data[key])
+              if (countAndUnit.length > 0){
+                this.modelConfig[key] = countAndUnit[1]
+                this.formItemLabelWidthUnit = countAndUnit[0]
+              }
+            } else {
+              this.modelConfig[key] = data[key]
+            }
+          }
         }
       }
+    },
+    _getCountAndUnit(value){
+      const countAndUnit = []
+      if (value){
+        countAndUnit.push(value.endsWith('px') ? 'px' : '%')
+        countAndUnit.push(value.substring(0, value.length - (value.endsWith('px') ? 2 : 1)))
+      }
+      return countAndUnit
     }
+  },
+  created(){
+    this.getBaseConfigInfo()
   }
 }
 </script>
