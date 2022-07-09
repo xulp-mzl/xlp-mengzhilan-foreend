@@ -9,3 +9,8 @@
 .hidden-custom-table-header{
     display: none;
 }
+
+.overflow-hidden .el-dialog{
+    overflow-x: hidden!important;
+    overflow-y: hidden!important;
+}

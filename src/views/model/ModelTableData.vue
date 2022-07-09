@@ -25,7 +25,8 @@
 
       <template #rowOption="scope">
         <el-button type="text" size="small" @click.native.stop="editModel(scope.row)">编辑</el-button>
-        <el-button type="text" size="small" @click.native.stop="baseInfoConfig(scope.row)">配置基本信息</el-button>
+        <el-button type="text" size="small" @click.native.stop="openConfig(scope.row, 2)">配置基本信息</el-button>
+        <el-button type="text" size="small" @click.native.stop="openConfig(scope.row, 3)">模型字段信息配置</el-button>
       </template>
     </common-border-table-with-page>
 
@@ -125,9 +126,9 @@ export default {
      * 基本信息配置
      * @param row
      */
-    baseInfoConfig(row){
+    openConfig(row, optionBtn){
       this.handleRowClick(row)
-      this.optionBtn = 2
+      this.optionBtn = optionBtn
       this.modelId = row.beanId
       this.handleRemove(true, false)
     }

@@ -1,6 +1,6 @@
 <template>
   <common-dialog dialog-title="基本操作信息配置" :visible.sync="visible"
-                 :before-close="handleBeforeClose">
+                 :before-close="handleBeforeClose" :class="[loading ? 'overflow-hidden' : '', 'base-config-dialog']">
 
     <template #body>
       <el-form :model="modelConfig" label-width="200px" ref="form" size="medium">
@@ -120,7 +120,8 @@ export default {
         {value: 12, label: '12'}
       ],
       formWidthUnit: 'px',
-      formItemLabelWidthUnit: 'px'
+      formItemLabelWidthUnit: 'px',
+      loading: true
     }
   },
   methods: {
@@ -173,6 +174,8 @@ export default {
      * @returns {Promise<void>}
      */
     async getBaseConfigInfo(){
+      this.loading = true
+      const appLoading = this.$appLoading(null, '.base-config-dialog .el-dialog')
       const response = await getBaseConfigInfo(this.modelId)
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
@@ -198,6 +201,8 @@ export default {
           }
         }
       }
+      this.loading = false
+      appLoading.close()
     },
     _getCountAndUnit(value){
       const countAndUnit = []
@@ -209,6 +214,9 @@ export default {
     }
   },
   created(){
+
+  },
+  mounted(){
     this.getBaseConfigInfo()
   }
 }
