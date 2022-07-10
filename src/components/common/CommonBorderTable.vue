@@ -174,9 +174,7 @@ export default {
   name: 'CommonBorderTable',
   props: {
     tableTitle: {
-      default: () => {
-        return []
-      },
+      default: () => [],
       type: Array
     },
     filterInfo: {

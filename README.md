@@ -88,3 +88,30 @@ getFilterData()
 该函数或过滤输入框中对应的类容
 ```
 
+###vue-cli自动补全css前缀
+```
+1. 安装postcss-loader autoprefixer
+npm install -D postcss-loader autoprefixer postcss
+2. 根目录下创建postcss.config.js文件
+module.exports = {
+	plugins: {
+		autoprefixer: {}
+		}
+}
+3. 在package.json文件配置
+"browserslist": [
+	"> 1%",
+	"last 3 versions",
+	"not ie <= 8",
+	"chrome >= 14",
+	"safari >= 3",
+	"ios >= 8",
+	"android >= 4.0"
+]
+里面的配置可根据需要修改
+
+4. 重启项目
+注意：安装后运行发现有报错：Error: PostCSS plugin autoprefixer requires PostCSS 8， 因为autoprefixer版本过高，可降级8.0版本
+npm i postcss-loader@3.0.0 autoprefixer@8.0.0 -D
+```
+

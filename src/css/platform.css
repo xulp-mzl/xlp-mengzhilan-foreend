@@ -14,3 +14,7 @@
     overflow-x: hidden!important;
     overflow-y: hidden!important;
 }
+
+.el-dialog__body{
+    padding-top: 15px;
+}

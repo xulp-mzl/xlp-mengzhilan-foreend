@@ -24,9 +24,9 @@
       </template>
 
       <template #rowOption="scope">
-        <el-button type="text" size="small" @click.native.stop="editModel(scope.row)">编辑</el-button>
-        <el-button type="text" size="small" @click.native.stop="openConfig(scope.row, 2)">配置基本信息</el-button>
-        <el-button type="text" size="small" @click.native.stop="openConfig(scope.row, 3)">模型字段信息配置</el-button>
+        <el-button type="text" size="small" @click.native.stop="openModelOpenDialog(scope.row, 1)">编辑</el-button>
+        <el-button type="text" size="small" @click.native.stop="openModelOpenDialog(scope.row, 2)">配置基本信息</el-button>
+        <el-button type="text" size="small" @click.native.stop="openModelOpenDialog(scope.row, 3)">模型字段信息配置</el-button>
       </template>
     </common-border-table-with-page>
 
@@ -45,6 +45,13 @@
         @removed="handleRemove"
         v-if="!isRemoved && optionBtn === 2">
     </edit-model-config-form>
+
+    <model-attr-config
+        :visible="showCreateForm"
+        :model-info="selection"
+        @removed="handleRemove"
+        v-if="!isRemoved && optionBtn === 3">
+    </model-attr-config>
   </div>
 </template>
 
@@ -56,6 +63,7 @@ import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWith
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
 import EditModelForm from '@/components/model/EditModelForm'
 import EditModelConfigForm from '@/components/model/EditModelConfigForm'
+import ModelAttrConfig from '@/components/model/ModelAttrConfig'
 // import {filterTableData, getFieldFilterInfo} from '@/js/tableFilterUtils'
 
 export default {
@@ -63,7 +71,8 @@ export default {
   components: {
     CommonBorderTableWithPage,
     EditModelForm,
-    EditModelConfigForm
+    EditModelConfigForm,
+    ModelAttrConfig
   },
   mixins: [PaginationTableDataMixins],
   data(){
@@ -74,14 +83,11 @@ export default {
     }
   },
   methods: {
-    /**
-     * 编辑菜单条目
-     * @param row
-     */
-    editModel(row){
+    openModelOpenDialog(row, optionBtn){
       this.handleRowClick(row)
       this.selection = row
-      this.optionBtn = 1
+      this.optionBtn = optionBtn
+      this.modelId = row.beanId
       this.handleRemove(true, false)
     },
     async getModelData(){
@@ -121,16 +127,6 @@ export default {
       } else {
         this.getModelData()
       }
-    },
-    /**
-     * 基本信息配置
-     * @param row
-     */
-    openConfig(row, optionBtn){
-      this.handleRowClick(row)
-      this.optionBtn = optionBtn
-      this.modelId = row.beanId
-      this.handleRemove(true, false)
     }
   },
   created(){
