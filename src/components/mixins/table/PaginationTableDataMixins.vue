@@ -83,6 +83,19 @@ export default {
       const elTable = this.getElTable()
       elTable.clearSelection()
       elTable.toggleRowSelection(row, true)
+    },
+    /**
+     * 用远程的数据初始化表格数据
+     *
+     * @param fromRemoteData
+     */
+    initTableData(fromRemoteData){
+      if (fromRemoteData){
+        this.sourceTableData = fromRemoteData
+        this.filterTableData = [...this.sourceTableData]
+        this.total = this.filterTableData.length
+        this.getTablePageData(this.currentPage, this.pageSize)
+      }
     }
   }
 }
