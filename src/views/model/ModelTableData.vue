@@ -7,7 +7,7 @@
      :filterable="true"
      :filter-info="filterInfo"
      type="selection"
-     :row-option-width="450"
+     :row-option-width="300"
      :current-page.sync="currentPage"
      :total="total"
      @search-data="filterData"
@@ -117,7 +117,9 @@ export default {
         return
       }
       const appLoading = this.$appLoading()
-      this._hideModel(selectionDataIds.join(','), appLoading)
+      this.$myConfirm('执行该操作后，模型不在显示，是否继续该操作？', () => {
+        this._hideModel(selectionDataIds.join(','), appLoading)
+      }, () => appLoading.close())
     },
     async _hideModel(selectionDataIds, appLoading){
       const response = await hideModels(selectionDataIds)
