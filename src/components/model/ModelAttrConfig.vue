@@ -2,23 +2,24 @@
   <common-dialog dialog-title="模型字段信息" :visible.sync="visible" width="85%"
                  :before-close="handleBeforeClose" :class="[loading ? 'overflow-hidden' : '', 'base-config-dialog']">
     <template #body>
-      <common-border-scroll-table-with-page ref="tableData"
-                                     :data="tableData"
-                                     :table-title="tableTitle"
-                                     :filterable="true"
-                                     :filter-info="filterInfo"
-                                     type="index"
-                                     :row-option-width="200"
-                                     :current-page.sync="currentPage"
-                                     :total="total"
-                                     :page-size="pageSize"
-                                     @search-data="filterData"
-                                     @clear-data="resetData"
-                                     @size-change="handleSizeChange"
-                                     @current-page-change="handleCurrentPageChange"
-                                     @selection-change="handleSelectionChange"
-                                     @row-click="handleRowClick"
-                                     :default-style="{width: '100%', height: 'auto'}">
+      <common-border-table-with-page ref="tableData"
+             :data="tableData"
+             :table-title="tableTitle"
+             :filterable="true"
+             :filter-info="filterInfo"
+             type="index"
+             :row-option-width="200"
+             :current-page.sync="currentPage"
+             :total="total"
+             :table-height-fixed="false"
+             :page-size="pageSize"
+             @search-data="filterData"
+             @clear-data="resetData"
+             @size-change="handleSizeChange"
+             @current-page-change="handleCurrentPageChange"
+             @selection-change="handleSelectionChange"
+             @row-click="handleRowClick"
+             :default-style="{width: '100%', height: 'auto'}">
 
         <template #tableToolbar v-if="canAddExtAttr">
           <div class="table-toolbar">
@@ -27,11 +28,11 @@
         </template>
 
         <template #rowOption="scope">
-          <el-button type="text" size="small" @click.native.stop="editModel(scope.row)">编辑</el-button>
-          <el-button type="text" size="small" @click.native.stop="openConfig(scope.row, 2)">配置基本信息</el-button>
-          <el-button type="text" size="small" @click.native.stop="openConfig(scope.row, 3)">模型字段信息配置</el-button>
+          <el-button type="text" size="small" @click.native.stop="editModelAttr(scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: red;"
+            v-if="scope.row && (scope.row.canDelete === true || scope.row.canDelete === 'true')">删除</el-button>
         </template>
-      </common-border-scroll-table-with-page>
+      </common-border-table-with-page>
     </template>
   </common-dialog>
 </template>
@@ -39,7 +40,7 @@
 <script>
 
 import FormMixins from '@/components/mixins/form/FormMixins'
-import CommonBorderScrollTableWithPage from '@/components/common/CommonBorderScrollTableWithPage'
+import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWithPage'
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
 import CommonDialog from '@/components/common/CommonDialog'
 import {tableTitle, filterInfo} from '@/js/model/modelField'
@@ -50,7 +51,7 @@ export default {
   mixins: [FormMixins, PaginationTableDataMixins],
   components: {
     CommonDialog,
-    CommonBorderScrollTableWithPage
+    CommonBorderTableWithPage
   },
   props: {
     /**

@@ -18,3 +18,7 @@
 .el-dialog__body{
     padding-top: 15px;
 }
+
+.table-outer-container .table-data-container .el-table .el-table__cell{
+    padding: 6px 0;
+}

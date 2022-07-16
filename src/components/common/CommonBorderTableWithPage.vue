@@ -237,11 +237,15 @@ export default {
     pageLayout: {
       default: 'total, sizes, prev, pager, next, jumper',
       type: String
+    },
+    tableHeightFixed: { // 是否现在表格高度, 默认固定
+      default: true,
+      type: Boolean
     }
   },
   data(){
     return {
-      maxHeight: 200,
+      maxHeight: undefined,
       filterData: null,
       rawFilterData: null
     }
@@ -286,16 +290,23 @@ export default {
     }
   },
   created(){
+    if (this.tableHeightFixed){
+      this.maxHeight = 200
+    }
     this.initFilterData()
   },
   mounted() {
-    this.$nextTick(() => {
-      this.getTableHeight()
-    })
-    window.addEventListener('resize', this.getTableHeight)
+    if (this.tableHeightFixed) {
+      this.$nextTick(() => {
+        this.getTableHeight()
+      })
+      window.addEventListener('resize', this.getTableHeight)
+    }
   },
   destroyed() {
-    window.removeEventListener('resize', this.getTableHeight)
+    if (this.tableHeightFixed) {
+      window.removeEventListener('resize', this.getTableHeight)
+    }
   }
 }
 </script>
@@ -316,7 +327,6 @@ export default {
             overflow: hidden;/*超出部分隐藏*/
             white-space: nowrap;/*不换行*/
           }
-          padding: 5px 0;
         }
         .el-table__fixed-right-patch{
           background-color: #e7e7e7;
