@@ -27,6 +27,11 @@
           </div>
         </template>
 
+        <template #attributeType="scope">
+          <div v-if="scope && scope.row && scope.row.attributeType === 'HARD_ATTR'">硬属性</div>
+          <div v-if="scope && scope.row && scope.row.attributeType === 'EXTEND_ATTR'" style="color: chartreuse;">扩展属性</div>
+        </template>
+
         <template #rowOption="scope">
           <el-button type="text" size="small" @click.native.stop="editModelAttr(scope.row)">编辑</el-button>
           <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: red;"
@@ -83,6 +88,10 @@ export default {
       }
       this.loading = false
       appLoading.close()
+    },
+    editModelAttr(row){
+      this.handleRowClick(row)
+      console.log(row)
     }
   },
   created(){

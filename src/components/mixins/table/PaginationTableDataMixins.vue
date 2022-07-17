@@ -83,6 +83,7 @@ export default {
       const elTable = this.getElTable()
       elTable.clearSelection()
       elTable.toggleRowSelection(row, true)
+      elTable.setCurrentRow(row)
     },
     /**
      * 用远程的数据初始化表格数据

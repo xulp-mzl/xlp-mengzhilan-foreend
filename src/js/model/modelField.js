@@ -18,6 +18,11 @@ export const tableTitle = [
     width: 100,
     align: 'center',
     sortable: true
+  },
+  {
+    label: '属性类型',
+    prop: 'attributeType',
+    slot: true
   }
 ]
 
@@ -27,5 +32,19 @@ export const filterInfo = {
   attrId: {
   },
   columnName: {
+  },
+  attributeType: {
+    propType: 'select', // 字段类型，用来创建搜索框的类型
+    // 过滤框为下拉选择框时，输入值[label: 显示文本, value: 值]
+    value: [
+      {
+        label: '扩展属性',
+        value: 'EXTEND_ATTR'
+      },
+      {
+        label: '硬属性',
+        value: 'HARD_ATTR'
+      }
+    ]
   }
 }
