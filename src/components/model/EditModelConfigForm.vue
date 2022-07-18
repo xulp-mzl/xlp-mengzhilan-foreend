@@ -1,5 +1,5 @@
 <template>
-  <common-dialog dialog-title="基本操作信息配置" :visible.sync="visible"
+  <common-dialog :dialog-title="'【' + modelId + '】基本操作信息配置'" :visible.sync="visible"
                  :before-close="handleBeforeClose" :class="[loading ? 'overflow-hidden' : '', 'base-config-dialog']">
 
     <template #body>

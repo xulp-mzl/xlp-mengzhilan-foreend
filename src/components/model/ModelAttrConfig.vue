@@ -1,6 +1,9 @@
 <template>
-  <common-dialog dialog-title="模型字段信息" :visible.sync="visible" width="85%"
-                 :before-close="handleBeforeClose" :class="[loading ? 'overflow-hidden' : '', 'base-config-dialog']">
+  <common-dialog :dialog-title="'【' + modelInfo.beanId + '】模型字段信息'"
+                 :visible.sync="visible"
+                 width="85%"
+                 :before-close="handleBeforeClose"
+                 :class="[loading ? 'overflow-hidden' : '', 'base-config-dialog']">
     <template #body>
       <common-border-table-with-page ref="tableData"
              :data="tableData"
@@ -38,6 +41,14 @@
             v-if="scope.row && (scope.row.canDelete === true || scope.row.canDelete === 'true')">删除</el-button>
         </template>
       </common-border-table-with-page>
+
+      <model-attr-config-form
+          :visible="showCreateForm"
+          :model-id="modelInfo.beanId"
+          :attr-id="attrId"
+          @removed="handleRemove"
+          v-if="!isRemoved">
+      </model-attr-config-form>
     </template>
   </common-dialog>
 </template>
@@ -50,13 +61,15 @@ import PaginationTableDataMixins from '@/components/mixins/table/PaginationTable
 import CommonDialog from '@/components/common/CommonDialog'
 import {tableTitle, filterInfo} from '@/js/model/modelField'
 import {getModelAttrs} from '@/js/api/modelAttr'
+import ModelAttrConfigForm from '@/components/model/ModelAttrConfigForm'
 
 export default {
   name: 'ModelAttrConfig',
   mixins: [FormMixins, PaginationTableDataMixins],
   components: {
     CommonDialog,
-    CommonBorderTableWithPage
+    CommonBorderTableWithPage,
+    ModelAttrConfigForm
   },
   props: {
     /**
@@ -70,7 +83,8 @@ export default {
   data(){
     return {
       canAddExtAttr: false,
-      pageSize: 50
+      pageSize: 50,
+      attrId: ''
     }
   },
   methods: {
@@ -91,7 +105,11 @@ export default {
     },
     editModelAttr(row){
       this.handleRowClick(row)
-      console.log(row)
+      this.attrId = row.attrId
+      this.handleRemove(true, false)
+      const rowData = {...row, modelId: this.modelInfo.beanId}
+      delete rowData.canDelete
+      console.log(rowData)
     }
   },
   created(){
