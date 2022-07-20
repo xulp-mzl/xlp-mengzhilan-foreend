@@ -46,6 +46,7 @@
           :visible="showCreateForm"
           :model-id="modelInfo.beanId"
           :attr-id="attrId"
+          :attr-name="modelInfo.beanName"
           @removed="handleRemove"
           v-if="!isRemoved">
       </model-attr-config-form>
@@ -107,9 +108,6 @@ export default {
       this.handleRowClick(row)
       this.attrId = row.attrId
       this.handleRemove(true, false)
-      const rowData = {...row, modelId: this.modelInfo.beanId}
-      delete rowData.canDelete
-      console.log(rowData)
     }
   },
   created(){
