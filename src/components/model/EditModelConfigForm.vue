@@ -51,7 +51,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="表单描述宽度：" prop="formItemLabelWidth"
+        <el-form-item label="表单字段描述宽度：" prop="formItemLabelWidth"
                       :rules="[validateInt('表单描述宽度必须是正整数')]">
           <el-input v-model.number="modelConfig.formItemLabelWidth" autocomplete="off">
             <template slot="append">
@@ -62,6 +62,13 @@
           </el-input>
         </el-form-item>
 
+        <el-form-item label="表格输入框的大小：" prop="formItemSizeType">
+          <el-select v-model="modelConfig.formItemSizeType" >
+            <el-option label="small" value="SMALL"></el-option>
+            <el-option label="mini" value="MINI"></el-option>
+            <el-option label="medium" value="MEDIUM"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
     </template>
 
@@ -103,7 +110,8 @@ export default {
         formWidth: null,
         fullscreen: false,
         splitColumnCount: 1,
-        formItemLabelWidth: 100
+        formItemLabelWidth: 100,
+        formItemSizeType: 'SMALL'
       },
       firstColumnTypes: [
         {value: 'none', label: '无'},

@@ -81,7 +81,12 @@
                   label="提示信息："
                   prop="placeholder"
               >
-                <el-input v-model="modelAttrInfo.placeholder" autocomplete="off" class="custom-input" type="mini" :disabled="disabled"></el-input>
+                <el-input v-model="modelAttrInfo.placeholder"
+                          autocomplete="off"
+                          class="custom-input"
+                          type="mini"
+                          :disabled="disabled"
+                          placeholder="请输入填写提示信息"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -173,42 +178,88 @@
                   label="输入框类型："
                   prop="formInputType"
               >
-                <el-radio-group v-model="modelAttrInfo.formInputType" type="mini" >
-                  <el-radio :label="true">是</el-radio>
-                  <el-radio :label="false">否</el-radio>
-                </el-radio-group>
+                <el-select v-model="modelAttrInfo.formInputType"
+                           placeholder="请选择输入框类型"
+                           size="mini"
+                           style="width: 100%;"
+                           class="custom-input">
+                  <el-option
+                      v-for="option in formInputTypes"
+                      :key="option.value"
+                      :label="option.label"
+                      :value="option.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
               <el-form-item
-                  label="自定义类名："
-                  prop="itemClassName"
+                  label="默认值："
+                  prop="defaultValue"
               >
-                <el-input v-model.number="modelAttrInfo.itemClassName"
-                          autocomplete="off"
-                          class="custom-input" type="mini">
-                </el-input>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="8">
-              <el-form-item
-                  label="文本长度："
-                  prop="textMaxLength"
-                  :rules="[
-                    validateInt('文本长度必须是不小于0的整数！')
-                  ]"
-              >
-                <el-input v-model.number="modelAttrInfo.textMaxLength"
+                <el-input v-model="modelAttrInfo.defaultValue"
                           autocomplete="off"
                           class="custom-input"
                           type="mini"
-                          :disabled="disabled">
+                          placeholder="请输入默认值">
                 </el-input>
               </el-form-item>
             </el-col>
+
+            <el-col :span="8">
+              <el-form-item
+                  label="值来源类型："
+                  prop="valueFromType"
+              >
+                <el-select v-model="modelAttrInfo.valueFromType"
+                           placeholder="请选择值来源类型"
+                           clearable
+                           size="mini"
+                           style="width: 100%;"
+                           class="custom-input"
+                           @change="valueFromTypeChange">
+                  <el-option
+                      label="来自外部链接（对可选框生效）"
+                      value="URL">
+                  </el-option>
+                  <el-option
+                      label="来自接口实现类（对可选框生效）"
+                      value="CLASS">
+                  </el-option>
+                  <el-option
+                    label="自定义输入（对可选框生效）"
+                    value="CUSTOM">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
+
+          <el-row :gutter="5" v-if="!disabled && valueFromInputFlag !== undefined">
+            <el-col :span="16">
+              <el-form-item
+                  label="值来源："
+                  prop="valueFrom">
+                <el-select v-model="modelAttrInfo.formInputType"
+                           placeholder="请选择输入框类型"
+                           size="mini"
+                           style="width: 100%;"
+                           class="custom-input">
+                  <el-option
+                      v-for="option in formInputTypes"
+                      :key="option.value"
+                      :label="option.label"
+                      :value="option.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+            </el-col>
+          </el-row>
+
         </el-form>
       </div>
     </template>
@@ -221,6 +272,7 @@ import FormMixins from '@/components/mixins/form/FormMixins'
 import CommonDialog from '@/components/common/CommonDialog'
 import {getModelAttr} from '@/js/api/modelAttr'
 import RuleValidation from '@/components/mixins/rules/RuleValidation'
+import {getFormInputType} from '@/js/api/selectOption'
 
 export default {
   name: 'ModelAttrConfigForm',
@@ -249,16 +301,26 @@ export default {
     attrName: {
       default: '',
       type: String
+    },
+    formFieldType: {
+      default: '',
+      type: String
     }
   },
   data(){
     return {
       loading: true,
       modelAttrInfo: {},
-      disabled: false
+      disabled: false,
+      formInputTypes: [],
+      valueFromInputFlag: undefined
     }
   },
   methods: {
+    /**
+     * 获取属性配置信息
+     * @returns {Promise<void>}
+     */
     async getAttr(){
       this.loading = true
       const appLoading = this.$appLoading(null, '.model-attr-config-dialog .el-dialog')
@@ -276,6 +338,27 @@ export default {
         if (this.modelAttrInfo.slot === true){
           this.disabled = true
           this.modelAttrInfo.textMaxLength = 0
+        }
+        if (!this.modelAttrInfo.formInputType){
+          if (this.formFieldType === 'DATE'){
+            this.$set(this.modelAttrInfo, 'formInputType', 'DATE')
+          } else if (this.formFieldType === 'BOOLEAN'){
+            this.$set(this.modelAttrInfo, 'formInputType', 'BOOLEAN')
+          } else {
+            this.$set(this.modelAttrInfo, 'formInputType', 'TEXT')
+          }
+        }
+        // eslint-disable-next-line no-prototype-builtins
+        if (!this.modelAttrInfo.hasOwnProperty('defaultValue')){
+          this.$set(this.modelAttrInfo, 'defaultValue', '')
+        }
+        // eslint-disable-next-line no-prototype-builtins
+        if (!this.modelAttrInfo.hasOwnProperty('valueFrom')){
+          this.$set(this.modelAttrInfo, 'valueFrom', '')
+        }
+        // eslint-disable-next-line no-prototype-builtins
+        if (!this.modelAttrInfo.hasOwnProperty('valueFromType')){
+          this.$set(this.modelAttrInfo, 'valueFromType', '')
         }
         console.log(this.modelAttrInfo)
       }
@@ -302,10 +385,31 @@ export default {
       } else {
 
       }
+    },
+    /**
+     * 获取表单条目输入类容下拉框选择内容
+     */
+    async getFormInputType(){
+      const response = await getFormInputType()
+      if (response.errorMsg){
+        this.$msgAlert(response.errorMsg, 'error')
+      } else {
+        this.formInputTypes = response.data
+        console.log(this.formInputTypes)
+      }
+    },
+    valueFromTypeChange(val){
+      if (val === '') {
+        this.valueFromInputFlag = undefined
+      } else {
+        this.valueFromInputFlag = val
+      }
+      console.log(this.valueFromInputFlag)
     }
   },
   mounted(){
     this.getAttr()
+    this.getFormInputType()
   }
 }
 </script>

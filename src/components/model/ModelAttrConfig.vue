@@ -47,6 +47,7 @@
           :model-id="modelInfo.beanId"
           :attr-id="attrId"
           :attr-name="modelInfo.beanName"
+          :form_field_type="modelInfo.formFieldType"
           @removed="handleRemove"
           v-if="!isRemoved">
       </model-attr-config-form>
