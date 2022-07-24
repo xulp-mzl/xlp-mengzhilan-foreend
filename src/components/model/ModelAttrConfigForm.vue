@@ -19,7 +19,7 @@
               <el-form-item
                   label="属性id："
               >
-                <el-input v-model="modelAttrInfo.attrId" disabled class="custom-input" type="mini"></el-input>
+                <el-input v-model="modelAttrInfo.attrId" disabled class="custom-input" size="mini"></el-input>
               </el-form-item>
             </el-col>
 
@@ -31,7 +31,7 @@
                     { required: true, message: '模型名称不能为空'},
                   ]"
               >
-                <el-input v-model.trim="modelAttrInfo.attrName" autocomplete="off" placeholder="请输入属性名称" class="custom-input" type="mini"></el-input>
+                <el-input v-model.trim="modelAttrInfo.attrName" autocomplete="off" placeholder="请输入属性名称" class="custom-input" size="mini"></el-input>
               </el-form-item>
             </el-col>
 
@@ -44,7 +44,7 @@
                     { type: 'number', message: '排序号必须为数字值'}
                   ]"
               >
-                <el-input v-model.number="modelAttrInfo.orderNo" autocomplete="off" class="custom-input" type="mini"></el-input>
+                <el-input v-model.number="modelAttrInfo.orderNo" autocomplete="off" class="custom-input" size="mini"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -57,7 +57,7 @@
                   label="新增时可编辑："
                   prop="adding"
               >
-                <el-radio-group v-model="modelAttrInfo.adding" type="mini" @change="addingChange">
+                <el-radio-group v-model="modelAttrInfo.adding" size="mini" @change="addingChange">
                   <el-radio :label="true">是</el-radio>
                   <el-radio :label="false">否</el-radio>
                 </el-radio-group>
@@ -69,7 +69,7 @@
                   label="新增时可显示："
                   prop="addingShow"
               >
-                <el-radio-group v-model="modelAttrInfo.addingShow" type="mini">
+                <el-radio-group v-model="modelAttrInfo.addingShow" size="mini">
                   <el-radio :label="true">是</el-radio>
                   <el-radio :label="false">否</el-radio>
                 </el-radio-group>
@@ -84,7 +84,7 @@
                 <el-input v-model="modelAttrInfo.placeholder"
                           autocomplete="off"
                           class="custom-input"
-                          type="mini"
+                          size="mini"
                           :disabled="disabled"
                           placeholder="请输入填写提示信息"></el-input>
               </el-form-item>
@@ -97,7 +97,7 @@
                   label="编辑时可编辑："
                   prop="edit"
               >
-                <el-radio-group v-model="modelAttrInfo.edit" type="mini" @change="editChange">
+                <el-radio-group v-model="modelAttrInfo.edit" size="mini" @change="editChange">
                   <el-radio :label="true">是</el-radio>
                   <el-radio :label="false">否</el-radio>
                 </el-radio-group>
@@ -109,7 +109,7 @@
                   label="编辑时可显示："
                   prop="editShow"
               >
-                <el-radio-group v-model="modelAttrInfo.editShow" type="mini">
+                <el-radio-group v-model="modelAttrInfo.editShow" size="mini">
                   <el-radio :label="true">是</el-radio>
                   <el-radio :label="false">否</el-radio>
                 </el-radio-group>
@@ -121,7 +121,7 @@
                   label="是否必填："
                   prop="required"
               >
-                <el-radio-group v-model="modelAttrInfo.required" type="mini" :disabled="disabled">
+                <el-radio-group v-model="modelAttrInfo.required" size="mini" :disabled="disabled">
                   <el-radio :label="true">是</el-radio>
                   <el-radio :label="false">否</el-radio>
                 </el-radio-group>
@@ -135,7 +135,7 @@
                   label="自定义输入框："
                   prop="slot"
               >
-                <el-radio-group v-model="modelAttrInfo.slot" type="mini" @change="slotChange">
+                <el-radio-group v-model="modelAttrInfo.slot" size="mini" @change="slotChange">
                   <el-radio :label="true">是</el-radio>
                   <el-radio :label="false">否</el-radio>
                 </el-radio-group>
@@ -149,7 +149,7 @@
               >
                 <el-input v-model.number="modelAttrInfo.itemClassName"
                           autocomplete="off"
-                          class="custom-input" type="mini">
+                          class="custom-input" size="mini">
                 </el-input>
               </el-form-item>
             </el-col>
@@ -165,7 +165,7 @@
                 <el-input v-model.number="modelAttrInfo.textMaxLength"
                           autocomplete="off"
                           class="custom-input"
-                          type="mini"
+                          size="mini"
                           :disabled="disabled">
                 </el-input>
               </el-form-item>
@@ -201,7 +201,7 @@
                 <el-input v-model="modelAttrInfo.defaultValue"
                           autocomplete="off"
                           class="custom-input"
-                          type="mini"
+                          size="mini"
                           placeholder="请输入默认值">
                 </el-input>
               </el-form-item>
@@ -220,12 +220,12 @@
                            class="custom-input"
                            @change="valueFromTypeChange">
                   <el-option
-                      label="来自外部链接（对可选框生效）"
-                      value="URL">
-                  </el-option>
-                  <el-option
                       label="来自接口实现类（对可选框生效）"
                       value="CLASS">
+                  </el-option>
+                  <el-option
+                      label="来自外部链接（对弹框选择生效）"
+                      value="URL">
                   </el-option>
                   <el-option
                     label="自定义输入（对可选框生效）"
@@ -241,7 +241,7 @@
               <el-form-item
                   label="值来源："
                   prop="valueFrom">
-                <el-select v-model="modelAttrInfo.formInputType"
+                <el-select v-model="modelAttrInfo.valueFrom" v-if="valueFromInputFlag === 'CLASS'"
                            placeholder="请选择输入框类型"
                            size="mini"
                            style="width: 100%;"
@@ -253,6 +253,20 @@
                       :value="option.value">
                   </el-option>
                 </el-select>
+                <el-input v-model="modelAttrInfo.valueFrom" v-if="valueFromInputFlag ==='URL'"
+                          autocomplete="off"
+                          class="custom-input"
+                          size="mini"
+                          placeholder="请输入问外部链接">
+                </el-input>
+                <el-input v-model="modelAttrInfo.valueFrom" v-if="valueFromInputFlag ==='CUSTOM'"
+                          class="custom-input"
+                          size="mini"
+                          type="textarea"
+                          resize="none"
+                          :rows="3"
+                          placeholder="请输入自定义值（json格式）">
+                </el-input>
               </el-form-item>
             </el-col>
 
@@ -395,7 +409,6 @@ export default {
         this.$msgAlert(response.errorMsg, 'error')
       } else {
         this.formInputTypes = response.data
-        console.log(this.formInputTypes)
       }
     },
     valueFromTypeChange(val){
@@ -404,7 +417,6 @@ export default {
       } else {
         this.valueFromInputFlag = val
       }
-      console.log(this.valueFromInputFlag)
     }
   },
   mounted(){
