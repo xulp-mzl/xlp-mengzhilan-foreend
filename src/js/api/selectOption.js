@@ -8,3 +8,10 @@ const BASE_URL = '/select/options'
 export function getFormInputType() {
   return request.get(BASE_URL + '/formInputType')
 }
+
+/**
+ * 获取值来源下拉选择类容
+ */
+export function getFormValueFromSelection() {
+  return request.get(BASE_URL + '/formValueFrom')
+}

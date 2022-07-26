@@ -239,11 +239,11 @@
                   label="值来源："
                   prop="valueFrom">
                 <el-select v-model="modelAttrInfo.valueFrom" v-if="valueFromInputFlag === 'CLASS'"
-                           placeholder="请选择输入框类型"
+                           placeholder="请选择"
                            style="width: 100%;"
                            class="custom-input">
                   <el-option
-                      v-for="option in formInputTypes"
+                      v-for="option in formValueFromSelection"
                       :key="option.value"
                       :label="option.label"
                       :value="option.value">
@@ -280,7 +280,7 @@ import FormMixins from '@/components/mixins/form/FormMixins'
 import CommonDialog from '@/components/common/CommonDialog'
 import {getModelAttr} from '@/js/api/modelAttr'
 import RuleValidation from '@/components/mixins/rules/RuleValidation'
-import {getFormInputType} from '@/js/api/selectOption'
+import {getFormInputType, getFormValueFromSelection} from '@/js/api/selectOption'
 
 export default {
   name: 'ModelAttrConfigForm',
@@ -321,7 +321,8 @@ export default {
       modelAttrInfo: {},
       disabled: false,
       formInputTypes: [],
-      valueFromInputFlag: undefined
+      valueFromInputFlag: undefined,
+      formValueFromSelection: []
     }
   },
   methods: {
@@ -411,11 +412,20 @@ export default {
       } else {
         this.valueFromInputFlag = val
       }
+    },
+    async getFormValueFromSelection(){
+      const response = await getFormValueFromSelection()
+      if (response.errorMsg){
+        this.$msgAlert(response.errorMsg, 'error')
+      } else {
+        this.formValueFromSelection = response.data
+      }
     }
   },
   mounted(){
     this.getAttr()
     this.getFormInputType()
+    this.getFormValueFromSelection()
   }
 }
 </script>
