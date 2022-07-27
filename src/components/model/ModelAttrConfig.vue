@@ -48,7 +48,7 @@
           :attr-id="attrId"
           :attr-name="modelInfo.beanName"
           :form_field_type="modelInfo.formFieldType"
-          @removed="handleRemove"
+          @removed="openAndCloseDialog"
           v-if="!isRemoved">
       </model-attr-config-form>
     </template>
@@ -108,7 +108,7 @@ export default {
     editModelAttr(row){
       this.handleRowClick(row)
       this.attrId = row.attrId
-      this.handleRemove(true, false)
+      this.openAndCloseDialog(true, false)
     }
   },
   created(){

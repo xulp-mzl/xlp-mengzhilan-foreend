@@ -24,7 +24,7 @@ export default {
     getElTable(){
       return this.$refs.tableData?.$refs.elTable
     },
-    handleRemove(showCreateForm, isRemoved){
+    openAndCloseDialog(showCreateForm, isRemoved){
       this.showCreateForm = showCreateForm
       this.isRemoved = isRemoved
     },

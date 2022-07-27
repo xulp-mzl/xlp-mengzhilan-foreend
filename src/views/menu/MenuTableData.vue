@@ -31,7 +31,7 @@
       </template>
     </common-border-table>
 
-    <edit-menu-item-form :visible="showCreateForm" @removed="handleRemove" v-if="!isRemoved"
+    <edit-menu-item-form :visible="showCreateForm" @removed="openAndCloseDialog" v-if="!isRemoved"
                          @reload-parent-table="reloadData" :item-info="edit ? selectedRow : undefined"
                          :edit="edit"
                          :parent-id="selectedRowIndex">
@@ -88,7 +88,7 @@ export default {
     },
     createMenuItem(){
       this.edit = false
-      this.handleRemove(true, false)
+      this.openAndCloseDialog(true, false)
     },
     selectRow(e){
       const target = e.target
@@ -137,7 +137,7 @@ export default {
     editMenuItem(row){
       this.lightAndSelectRow(row)
       this.edit = true
-      this.handleRemove(true, false)
+      this.openAndCloseDialog(true, false)
     },
     lightAndSelectRow(row){
       this.selectedRowIndex = row[this.rowKeyName]

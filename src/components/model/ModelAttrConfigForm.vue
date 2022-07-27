@@ -10,6 +10,7 @@
         <span>模型字段信息</span>
       </div>
     </template>
+
     <template #body>
       <div class="attr-body">
         <el-form :model="modelAttrInfo" label-width="112px" ref="form" size="mini">
@@ -243,10 +244,10 @@
                            style="width: 100%;"
                            class="custom-input">
                   <el-option
-                      v-for="option in formValueFromSelection"
-                      :key="option.value"
-                      :label="option.label"
-                      :value="option.value">
+                      v-for="key in formValueFromSelection"
+                      :key="key"
+                      :label="formValueFromSelection[key]"
+                      :value="key">
                   </el-option>
                 </el-select>
                 <el-input v-model="modelAttrInfo.valueFrom" v-if="valueFromInputFlag ==='URL'"
@@ -269,6 +270,13 @@
           </el-row>
 
         </el-form>
+      </div>
+    </template>
+
+    <template #footer>
+      <div class="dialog-footer" style="text-align: center">
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button type="primary" @click="save" :disabled="disabled">保存</el-button>
       </div>
     </template>
   </common-dialog>
@@ -407,6 +415,7 @@ export default {
       }
     },
     valueFromTypeChange(val){
+      this.modelAttrInfo.valueFrom = ''
       if (val === '') {
         this.valueFromInputFlag = undefined
       } else {
@@ -420,6 +429,9 @@ export default {
       } else {
         this.formValueFromSelection = response.data
       }
+    },
+    save(){
+
     }
   },
   mounted(){

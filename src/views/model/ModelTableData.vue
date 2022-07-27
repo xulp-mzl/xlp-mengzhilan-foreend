@@ -33,7 +33,7 @@
     <edit-model-form
         :visible="showCreateForm"
         :model-info="selection"
-         @removed="handleRemove"
+         @removed="openAndCloseDialog"
          @reload-parent-table="getModelData"
          v-if="!isRemoved && optionBtn === 1"
       >
@@ -42,14 +42,14 @@
     <edit-model-config-form
         :visible="showCreateForm"
         :model-id="modelId"
-        @removed="handleRemove"
+        @removed="openAndCloseDialog"
         v-if="!isRemoved && optionBtn === 2">
     </edit-model-config-form>
 
     <model-attr-config
         :visible="showCreateForm"
         :model-info="selection"
-        @removed="handleRemove"
+        @removed="openAndCloseDialog"
         v-if="!isRemoved && optionBtn === 3">
     </model-attr-config>
   </div>
@@ -88,7 +88,7 @@ export default {
       this.selection = row
       this.optionBtn = optionBtn
       this.modelId = row.beanId
-      this.handleRemove(true, false)
+      this.openAndCloseDialog(true, false)
     },
     async getModelData(){
       this.loading = true
