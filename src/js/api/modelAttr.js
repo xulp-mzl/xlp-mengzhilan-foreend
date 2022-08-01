@@ -15,3 +15,25 @@ export function getModelAttrs(modelId) {
 export function getModelAttr(modelId, attrId) {
   return request.get(BASE_URL + '/' + modelId + '/' + attrId)
 }
+
+/**
+ * 保存信息
+ * @param attribute
+ */
+export function saveAttribute(attribute) {
+  return request.post(BASE_URL, attribute)
+}
+
+/**
+ * 批量设置模型属性配置
+ * @param modelId
+ * @param attrIds
+ */
+export function batchSetting(modelId, attrIds) {
+  return request.post(BASE_URL + '/batchSetting', null, {
+    params: {
+      modelId,
+      attrIds
+    }
+  })
+}

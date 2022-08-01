@@ -26,10 +26,10 @@
 
             <el-col :span="8">
               <el-form-item
-                  label="模型名称："
+                  label="属性名称："
                   prop="attrName"
                   :rules="[
-                    { required: true, message: '模型名称不能为空'},
+                    { required: true, message: '属性名称不能为空'},
                   ]"
               >
                 <el-input v-model.trim="modelAttrInfo.attrName" autocomplete="off" placeholder="请输入属性名称" class="custom-input"></el-input>
@@ -286,7 +286,7 @@
 
 import FormMixins from '@/components/mixins/form/FormMixins'
 import CommonDialog from '@/components/common/CommonDialog'
-import {getModelAttr} from '@/js/api/modelAttr'
+import {getModelAttr, saveAttribute} from '@/js/api/modelAttr'
 import RuleValidation from '@/components/mixins/rules/RuleValidation'
 import {getFormInputType, getFormValueFromSelection} from '@/js/api/selectOption'
 
@@ -377,7 +377,6 @@ export default {
         if (!this.modelAttrInfo.hasOwnProperty('valueFromType')){
           this.$set(this.modelAttrInfo, 'valueFromType', '')
         }
-        console.log(this.modelAttrInfo)
       }
       this.loading = false
       appLoading.close()
@@ -431,7 +430,30 @@ export default {
       }
     },
     save(){
-
+      const canSave = this.validateForm(this.$refs.form)
+      if (canSave){
+        this._save()
+      } else {
+        this.$msgAlert('请按要求填好表格数据后，再提交！', 'error')
+      }
+    },
+    async _save(){
+      this.loading = true
+      const appLoading = this.$appLoading(null, '.model-attr-config-dialog .el-dialog')
+      const modelAttrInfoNew = {...this.modelAttrInfo, modelId: this.modelId, attrId: this.attrId}
+      delete modelAttrInfoNew.canDelete
+      let valueFromType = modelAttrInfoNew.valueFromType
+      valueFromType = valueFromType === '' ? null : valueFromType
+      modelAttrInfoNew.valueFromType = valueFromType
+      const response = await saveAttribute(modelAttrInfoNew)
+      if (response.errorMsg){
+        this.$msgAlert(response.errorMsg, 'error')
+      } else {
+        this.closeDialog()
+        this.$tips('数据保存成功！')
+      }
+      appLoading.close()
+      this.loading = false
     }
   },
   mounted(){

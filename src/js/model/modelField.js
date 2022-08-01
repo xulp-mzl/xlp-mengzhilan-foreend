@@ -1,6 +1,6 @@
 export const tableTitle = [
   {
-    label: '字段属性id', // 标题名称
+    label: '模型属性标识', // 标题名称
     prop: 'attrId', // 字段名称
     width: 250 // 列宽
   },

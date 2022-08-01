@@ -10,7 +10,7 @@
              :table-title="tableTitle"
              :filterable="true"
              :filter-info="filterInfo"
-             type="index"
+             type="selection"
              :row-option-width="200"
              :current-page.sync="currentPage"
              :total="total"
@@ -24,9 +24,12 @@
              @row-click="handleRowClick"
              :default-style="{width: '100%', height: 'auto'}">
 
-        <template #tableToolbar v-if="canAddExtAttr">
+        <template #tableToolbar>
           <div class="table-toolbar">
-            <el-button type="primary" icon="el-icon-plus" plain size="small" @click="addExtField">添加扩展字段</el-button>
+            <el-button type="primary" icon="el-icon-plus" plain size="small"
+                   @click="addExtField" v-if="canAddExtAttr">添加扩展字段</el-button>
+            <el-button type="primary" icon="el-icon-setting" plain size="small"
+                       @click="batchSetting">批量配置模型属性</el-button>
           </div>
         </template>
 
@@ -46,7 +49,7 @@
           :visible="showCreateForm"
           :model-id="modelInfo.beanId"
           :attr-id="attrId"
-          :attr-name="modelInfo.beanName"
+          :attr-name="attrName"
           :form_field_type="modelInfo.formFieldType"
           @removed="openAndCloseDialog"
           v-if="!isRemoved">
@@ -62,7 +65,7 @@ import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWith
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
 import CommonDialog from '@/components/common/CommonDialog'
 import {tableTitle, filterInfo} from '@/js/model/modelField'
-import {getModelAttrs} from '@/js/api/modelAttr'
+import {getModelAttrs, batchSetting} from '@/js/api/modelAttr'
 import ModelAttrConfigForm from '@/components/model/ModelAttrConfigForm'
 
 export default {
@@ -86,7 +89,8 @@ export default {
     return {
       canAddExtAttr: false,
       pageSize: 50,
-      attrId: ''
+      attrId: '',
+      attrName: ''
     }
   },
   methods: {
@@ -108,7 +112,28 @@ export default {
     editModelAttr(row){
       this.handleRowClick(row)
       this.attrId = row.attrId
+      this.attrName = row.attrName
       this.openAndCloseDialog(true, false)
+    },
+    /**
+     * 批量设置模型属性配置信息
+     */
+    async batchAttrSetting(){
+      if (!this.selections || this.selections.length === 0){
+        this.$msgAlert('请选择要操作的数据！', 'error')
+        return
+      }
+      let attrIds = []
+      this.selections.forEach((item) => {
+        attrIds.push(item.attrId)
+      })
+      attrIds = attrIds.join(',')
+      batchSetting(this.modelInfo.beanId, attrIds)
+        .then((data) => {
+          console.log(batchSetting)
+        }).catch(() => {
+          this.$msgAlert('批量设置模型属性信息失败！', 'error')
+        })
     }
   },
   created(){
