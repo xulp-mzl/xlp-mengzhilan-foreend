@@ -39,3 +39,11 @@ export function batchSetting(modelId, attrIds) {
     axiosCommonConfig
   )
 }
+
+/**
+ * 添加扩展属性
+ * @param attribute
+ */
+export function addExtendAttribute(attribute) {
+  return request.post(BASE_URL + '/addExtendAttribute', attribute)
+}

@@ -1,5 +1,5 @@
 <template>
-  <common-dialog :dialog-title="'【' + modelInfo.beanId + '】模型字段信息'"
+  <common-dialog :dialog-title="'【' + modelInfo.beanId + '】模型属性信息'"
                  :visible.sync="visible"
                  width="85%"
                  :before-close="handleBeforeClose"
@@ -39,9 +39,11 @@
         </template>
 
         <template #rowOption="scope">
-          <el-button type="text" size="small" @click.native.stop="editModelAttr(scope.row)">编辑</el-button>
-          <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: red;"
-            v-if="scope.row && (scope.row.canDelete === true || scope.row.canDelete === 'true')">删除</el-button>
+          <div v-if="scope.row && (scope.row.canDelete === true || scope.row.canDelete === 'true')">
+            <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: red;">删除</el-button>
+            <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: lightgreen;">发布</el-button>
+          </div>
+          <el-button type="text" size="small" @click.native.stop="editModelAttr(scope.row)" v-else>编辑</el-button>
         </template>
       </common-border-table-with-page>
 
@@ -50,7 +52,8 @@
           :model-id="modelInfo.beanId"
           :attr-id="attrId"
           :attr-name="attrName"
-          :form_field_type="modelInfo.formFieldType"
+          :form-field-type="formFieldType"
+          :is-add="isAdd"
           @removed="openAndCloseDialog"
           v-if="!isRemoved">
       </model-attr-config-form>
@@ -90,12 +93,18 @@ export default {
       canAddExtAttr: false,
       pageSize: 50,
       attrId: '',
-      attrName: ''
+      attrName: '',
+      isAdd: false,
+      formFieldType: ''
     }
   },
   methods: {
     addExtField(){
-
+      this.isAdd = true
+      this.attrId = undefined
+      this.attrName = undefined
+      this.formFieldType = undefined
+      this.openAndCloseDialog(true, false)
     },
     async getAllAttrs(){
       this.loading = true
@@ -110,9 +119,11 @@ export default {
       appLoading.close()
     },
     editModelAttr(row){
+      this.isAdd = false
       this.handleRowClick(row)
       this.attrId = row.attrId
       this.attrName = row.attrName
+      this.formFieldType = row.formFieldType
       this.openAndCloseDialog(true, false)
     },
     /**
@@ -123,6 +134,8 @@ export default {
         this.$msgAlert('请选择要操作的数据！', 'error')
         return
       }
+      // eslint-disable-next-line no-unused-vars
+      const appLoading = this.$appLoading()
       let attrIds = []
       this.selections.forEach((item) => {
         attrIds.push(item.attrId)
@@ -132,9 +145,16 @@ export default {
         .then((data) => {
           if (data.code !== 200 && data.errorMsg){
             this.$msgAlert(data.errorMsg, 'error')
+            return
           }
+          this.$tips('批量设置成功！')
+          // 清除已有的选择
+          // eslint-disable-next-line no-unused-expressions
+          this.getElTable()?.clearSelection()
+          appLoading.close()
         }).catch(() => {
           this.$msgAlert('批量设置模型属性信息失败！', 'error')
+          appLoading.close()
         })
     }
   },

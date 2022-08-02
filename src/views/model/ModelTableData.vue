@@ -26,7 +26,8 @@
       <template #rowOption="scope">
         <el-button type="text" size="small" @click.native.stop="openModelOpenDialog(scope.row, 1)">编辑</el-button>
         <el-button type="text" size="small" @click.native.stop="openModelOpenDialog(scope.row, 2)">配置基本信息</el-button>
-        <el-button type="text" size="small" @click.native.stop="openModelOpenDialog(scope.row, 3)">模型字段信息配置</el-button>
+        <el-button type="text" size="small" @click.native.stop="openModelOpenDialog(scope.row, 3)">模型属性配置</el-button>
+        <el-button type="text" size="small" @click.native.stop="openModelOpenDialog(scope.row, 4)">模型表格配置</el-button>
       </template>
     </common-border-table-with-page>
 

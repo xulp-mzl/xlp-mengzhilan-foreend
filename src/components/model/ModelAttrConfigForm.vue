@@ -5,7 +5,11 @@
                  :before-close="handleBeforeClose"
                   :class="[loading ? 'overflow-hidden' : '', 'model-attr-config-dialog']">
     <template #title>
-      <div>
+      <div v-if="isAdd">
+        <span style="color: #43b8c2">【{{modelId}}】</span>
+        <span>模型添加扩展属性</span>
+      </div>
+      <div v-else>
         <span style="color: #43b8c2">【{{modelId}}--{{attrId}}】</span>
         <span>模型字段信息</span>
       </div>
@@ -19,8 +23,14 @@
             <el-col :span="8">
               <el-form-item
                   label="属性id："
+                  prop="attrId"
+                  :rules="[
+                    {required: true, message: '属性id不能为空'},
+                    {pattern: /^[a-zA-Z_]*$/, message: '属性id必须是字母或下划线'},
+                  ]"
               >
-                <el-input v-model="modelAttrInfo.attrId" disabled class="custom-input"></el-input>
+                <el-input v-model="modelAttrInfo.attrId" :disabled="!isAdd" class="custom-input"
+                          placeholder="请输入属性id"></el-input>
               </el-form-item>
             </el-col>
 
@@ -321,12 +331,36 @@ export default {
     formFieldType: {
       default: '',
       type: String
+    },
+    isAdd: {
+      type: Boolean,
+      default: false
     }
   },
   data(){
     return {
-      loading: true,
-      modelAttrInfo: {},
+      loading: false,
+      modelAttrInfo: {
+        adding: false,
+        addingShow: false,
+        attrId: '',
+        attrName: '',
+        canDelete: false,
+        classId: 'ModelFormDetailConfig',
+        defaultValue: '',
+        edit: false,
+        editShow: false,
+        formInputType: 'TEXT',
+        itemClassName: '',
+        modelId: '',
+        orderNo: 0,
+        placeholder: '',
+        required: false,
+        slot: false,
+        textMaxLength: 0,
+        valueFrom: '',
+        valueFromType: ''
+      },
       disabled: false,
       formInputTypes: [],
       valueFromInputFlag: undefined,
@@ -378,6 +412,10 @@ export default {
           this.$set(this.modelAttrInfo, 'valueFromType', '')
         }
       }
+      // 清除首次进入页面的校验信息
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate()
+      })
       this.loading = false
       appLoading.close()
     },
@@ -440,7 +478,7 @@ export default {
     async _save(){
       this.loading = true
       const appLoading = this.$appLoading(null, '.model-attr-config-dialog .el-dialog')
-      const modelAttrInfoNew = {...this.modelAttrInfo, modelId: this.modelId, attrId: this.attrId}
+      const modelAttrInfoNew = {...this.modelAttrInfo, modelId: this.modelId}
       delete modelAttrInfoNew.canDelete
       let valueFromType = modelAttrInfoNew.valueFromType
       valueFromType = valueFromType === '' ? null : valueFromType
@@ -456,10 +494,14 @@ export default {
       this.loading = false
     }
   },
-  mounted(){
-    this.getAttr()
+  created(){
     this.getFormInputType()
     this.getFormValueFromSelection()
+  },
+  mounted(){
+    if (!this.isAdd) {
+      this.getAttr()
+    }
   }
 }
 </script>
