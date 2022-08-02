@@ -118,7 +118,7 @@ export default {
     /**
      * 批量设置模型属性配置信息
      */
-    async batchAttrSetting(){
+    async batchSetting(){
       if (!this.selections || this.selections.length === 0){
         this.$msgAlert('请选择要操作的数据！', 'error')
         return
@@ -130,7 +130,9 @@ export default {
       attrIds = attrIds.join(',')
       batchSetting(this.modelInfo.beanId, attrIds)
         .then((data) => {
-          console.log(batchSetting)
+          if (data.code !== 200 && data.errorMsg){
+            this.$msgAlert(data.errorMsg, 'error')
+          }
         }).catch(() => {
           this.$msgAlert('批量设置模型属性信息失败！', 'error')
         })

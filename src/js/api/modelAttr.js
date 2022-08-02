@@ -1,4 +1,5 @@
 import request from '@/js/request'
+import {axiosCommonConfig} from '@/js/api/axios/axiosConfigUtils'
 
 const BASE_URL = '/model/attrs'
 
@@ -30,10 +31,11 @@ export function saveAttribute(attribute) {
  * @param attrIds
  */
 export function batchSetting(modelId, attrIds) {
-  return request.post(BASE_URL + '/batchSetting', null, {
-    params: {
+  return request.post(BASE_URL + '/batchSetting',
+    {
       modelId,
       attrIds
-    }
-  })
+    },
+    axiosCommonConfig
+  )
 }
