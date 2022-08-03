@@ -77,9 +77,7 @@ export default {
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
       } else {
-        // 刷新表格数据
-        this.$emit('reload-parent-table', true)
-        this.closeDialog()
+        this.closeDialog(true)
         this.$tips('数据修改成功！')
       }
       this.disabled = false

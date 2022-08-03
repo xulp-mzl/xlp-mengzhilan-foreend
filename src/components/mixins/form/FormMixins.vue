@@ -34,9 +34,12 @@ export default {
     },
     /**
      * 关闭表单
+     * @param isRefreshed 关闭表单时，是否刷新数据，true：刷新，false:不刷新
      */
-    closeDialog(){
+    closeDialog(isRefreshed){
       this.$emit('removed', !this.visible, true)
+      // 发送关闭表单的事件
+      this.$emit('reload-parent-table', isRefreshed === true)
     },
     /**
      * 重置表单

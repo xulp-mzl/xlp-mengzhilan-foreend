@@ -35,7 +35,7 @@
         :visible="showCreateForm"
         :model-info="selection"
          @removed="openAndCloseDialog"
-         @reload-parent-table="getModelData"
+         @reload-parent-table="reloadData"
          v-if="!isRemoved && optionBtn === 1"
       >
     </edit-model-form>
@@ -65,7 +65,7 @@ import PaginationTableDataMixins from '@/components/mixins/table/PaginationTable
 import EditModelForm from '@/components/model/EditModelForm'
 import EditModelConfigForm from '@/components/model/EditModelConfigForm'
 import ModelAttrConfig from '@/components/model/ModelAttrConfig'
-// import {filterTableData, getFieldFilterInfo} from '@/js/tableFilterUtils'
+import {filterTableData, getFieldFilterInfo} from '@/js/tableFilterUtils'
 
 export default {
   name: 'MenuTableData',
@@ -98,7 +98,7 @@ export default {
         this.$msgAlert(tableData.errorMsg, 'error')
       } else {
         this.sourceTableData = tableData.data
-        // this.filterTableData = filterTableData([...this.sourceTableData], getFieldFilterInfo(filterInfo))
+        this.filterTableData = filterTableData([...this.sourceTableData], getFieldFilterInfo(filterInfo))
         this.filterTableData = [...this.sourceTableData]
         this.total = this.filterTableData.length
         this.getTablePageData(this.currentPage, this.pageSize)
@@ -128,6 +128,11 @@ export default {
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
       } else {
+        this.getModelData()
+      }
+    },
+    reloadData(isRefreshed){
+      if (isRefreshed){
         this.getModelData()
       }
     }

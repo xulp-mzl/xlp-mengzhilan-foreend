@@ -103,8 +103,7 @@ export default {
             _this.$msgAlert(data.errorMsg, 'error')
             return
           }
-          _this.$emit('reload-parent-table', true)
-          _this.closeDialog()
+          _this.closeDialog(true)
           _this.$tips('数据保存成功！')
         }(this))
       } else {

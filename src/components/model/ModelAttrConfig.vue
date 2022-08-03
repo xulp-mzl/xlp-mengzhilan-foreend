@@ -39,11 +39,12 @@
         </template>
 
         <template #rowOption="scope">
-          <div v-if="scope.row && (scope.row.canDelete === true || scope.row.canDelete === 'true')">
+          <el-button type="text" size="small" @click.native.stop="editModelAttr(scope.row)">编辑</el-button>
+          <div v-if="scope.row && (scope.row.canDelete === true || scope.row.canDelete === 'true')"
+               style="display: inline-block; margin-left: 10px;">
             <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: red;">删除</el-button>
             <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: lightgreen;">发布</el-button>
           </div>
-          <el-button type="text" size="small" @click.native.stop="editModelAttr(scope.row)" v-else>编辑</el-button>
         </template>
       </common-border-table-with-page>
 
@@ -55,6 +56,7 @@
           :form-field-type="formFieldType"
           :is-add="isAdd"
           @removed="openAndCloseDialog"
+          @reload-parent-table="reloadData"
           v-if="!isRemoved">
       </model-attr-config-form>
     </template>
@@ -156,6 +158,11 @@ export default {
           this.$msgAlert('批量设置模型属性信息失败！', 'error')
           appLoading.close()
         })
+    },
+    reloadData(isRefreshed){
+      if (isRefreshed) {
+        this.getAllAttrs()
+      }
     }
   },
   created(){

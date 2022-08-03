@@ -26,7 +26,7 @@
                   prop="attrId"
                   :rules="[
                     {required: true, message: '属性id不能为空'},
-                    {pattern: /^[a-zA-Z_]*$/, message: '属性id必须是字母或下划线'},
+                    {pattern: /^[a-zA-Z_0-9][a-zA-Z_0-9]*$/, message: '属性id必须是字母或下划线或数字，不能以数字开头', trigger: 'blur'},
                   ]"
               >
                 <el-input v-model="modelAttrInfo.attrId" :disabled="!isAdd" class="custom-input"
@@ -296,7 +296,7 @@
 
 import FormMixins from '@/components/mixins/form/FormMixins'
 import CommonDialog from '@/components/common/CommonDialog'
-import {getModelAttr, saveAttribute} from '@/js/api/modelAttr'
+import {getModelAttr, saveAttribute, addExtendAttribute} from '@/js/api/modelAttr'
 import RuleValidation from '@/components/mixins/rules/RuleValidation'
 import {getFormInputType, getFormValueFromSelection} from '@/js/api/selectOption'
 
@@ -374,6 +374,7 @@ export default {
      */
     async getAttr(){
       this.loading = true
+      this.disabled = true
       const appLoading = this.$appLoading(null, '.model-attr-config-dialog .el-dialog')
       const response = await getModelAttr(this.modelId, this.attrId)
       if (response.errorMsg){
@@ -416,6 +417,7 @@ export default {
       this.$nextTick(() => {
         this.$refs.form.clearValidate()
       })
+      this.disabled = false
       this.loading = false
       appLoading.close()
     },
@@ -436,8 +438,6 @@ export default {
         this.modelAttrInfo.placeholder = ''
         this.modelAttrInfo.textMaxLength = 0
         this.$refs.form.clearValidate('textMaxLength')
-      } else {
-
       }
     },
     /**
@@ -483,11 +483,12 @@ export default {
       let valueFromType = modelAttrInfoNew.valueFromType
       valueFromType = valueFromType === '' ? null : valueFromType
       modelAttrInfoNew.valueFromType = valueFromType
-      const response = await saveAttribute(modelAttrInfoNew)
+      const response = this.isAdd ? await addExtendAttribute(modelAttrInfoNew)
+        : await saveAttribute(modelAttrInfoNew)
       if (response.errorMsg){
         this.$msgAlert(response.errorMsg, 'error')
       } else {
-        this.closeDialog()
+        this.closeDialog(true)
         this.$tips('数据保存成功！')
       }
       appLoading.close()
