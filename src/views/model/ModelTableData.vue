@@ -104,14 +104,11 @@ export default {
      * 设置隐藏模型操作
      */
     hideModel(){
+      if (!this.validateSelected()) return
       const selectionDataIds = []
       this.selections.forEach((item) => {
         selectionDataIds.push(item.beanId)
       })
-      if (selectionDataIds.length === 0) {
-        this.$msgAlert('请选择要操作的数据！', 'error')
-        return
-      }
       const appLoading = this.$appLoading()
       this.$myConfirm('执行该操作后，模型不在显示，是否继续该操作？', () => {
         this._hideModel(selectionDataIds.join(','), appLoading)

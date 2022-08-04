@@ -26,7 +26,7 @@
                   prop="attrId"
                   :rules="[
                     {required: true, message: '属性id不能为空'},
-                    {pattern: /^[a-zA-Z_0-9][a-zA-Z_0-9]*$/, message: '属性id必须是字母或下划线或数字，不能以数字开头', trigger: 'blur'},
+                    {pattern: /^[a-zA-Z_][a-zA-Z_0-9]*$/, message: '属性id必须是字母或下划线或数字，不能以数字开头', trigger: 'blur'},
                   ]"
               >
                 <el-input v-model="modelAttrInfo.attrId" :disabled="!isAdd" class="custom-input"

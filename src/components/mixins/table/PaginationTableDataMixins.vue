@@ -14,9 +14,7 @@ export default {
     return {
       currentPage: 1,
       total: 0,
-      pageSize: 10,
-      // 存储选择的数据
-      selections: []
+      pageSize: 10
     }
   },
   methods: {

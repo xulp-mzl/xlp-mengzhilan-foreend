@@ -47,3 +47,13 @@ export function batchSetting(modelId, attrIds) {
 export function addExtendAttribute(attribute) {
   return request.post(BASE_URL + '/addExtendAttribute', attribute)
 }
+
+/**
+ * 删除模型属性
+ * @param modelId
+ * @param attrIds
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+export function deleteAttrs(modelId, attrIds) {
+  return request.delete(BASE_URL + '?modelId=' + modelId + '&attrIds=' + attrIds)
+}

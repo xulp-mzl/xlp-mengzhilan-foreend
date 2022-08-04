@@ -30,6 +30,10 @@
                    @click="addExtField" v-if="canAddExtAttr">添加扩展字段</el-button>
             <el-button type="primary" icon="el-icon-setting" plain size="small"
                        @click="batchSetting">批量配置模型属性</el-button>
+            <el-button type="primary" icon="el-icon-delete" plain size="small"
+                       @click="batchDelete" v-if="canAddExtAttr">批量删除</el-button>
+            <el-button type="primary" icon="el-icon-edit-outline" plain size="small"
+                       @click="batchDeletePublish" v-if="canAddExtAttr">批量发布</el-button>
           </div>
         </template>
 
@@ -42,7 +46,7 @@
           <el-button type="text" size="small" @click.native.stop="editModelAttr(scope.row)">编辑</el-button>
           <div v-if="scope.row && (scope.row.canDelete === true || scope.row.canDelete === 'true')"
                style="display: inline-block; margin-left: 10px;">
-            <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: red;">删除</el-button>
+            <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row.attrId)" style="color: red;">删除</el-button>
             <el-button type="text" size="small" @click.native.stop="deleteModelAttr(scope.row)" style="color: lightgreen;">发布</el-button>
           </div>
         </template>
@@ -70,7 +74,7 @@ import CommonBorderTableWithPage from '@/components/common/CommonBorderTableWith
 import PaginationTableDataMixins from '@/components/mixins/table/PaginationTableDataMixins'
 import CommonDialog from '@/components/common/CommonDialog'
 import {tableTitle, filterInfo} from '@/js/model/modelField'
-import {getModelAttrs, batchSetting} from '@/js/api/modelAttr'
+import {getModelAttrs, batchSetting, deleteAttrs} from '@/js/api/modelAttr'
 import ModelAttrConfigForm from '@/components/model/ModelAttrConfigForm'
 
 export default {
@@ -132,10 +136,7 @@ export default {
      * 批量设置模型属性配置信息
      */
     async batchSetting(){
-      if (!this.selections || this.selections.length === 0){
-        this.$msgAlert('请选择要操作的数据！', 'error')
-        return
-      }
+      if (!this.validateSelected()) return
       // eslint-disable-next-line no-unused-vars
       const appLoading = this.$appLoading()
       let attrIds = []
@@ -164,6 +165,47 @@ export default {
         await this.getAllAttrs()
         this.refreshPage()
       }
+    },
+    /**
+     * 删除属性
+     */
+    deleteModelAttr(attrIds){
+      this.$myConfirm('确定删除该属性？', async() => {
+        const $appLoading = this.$appLoading('正在删除中，请稍后。。。')
+        const response = await deleteAttrs(this.modelInfo.beanId, attrIds)
+        if (response.errorMsg){
+          this.$msgAlert(response.errorMsg, 'error')
+        } else {
+          this.$tips('数据删除成功！')
+          this.reloadData(true)
+        }
+        $appLoading.close()
+      })
+    },
+    /**
+     * 批量删除属性
+     */
+    batchDelete(){
+      if (!this.validateSelected()) return
+      if (this.selections.some((item) => !item.canDelete)){
+        this.$msgAlert('不能选择不能删除的属性进行删除，请重新选择数据！', 'error')
+        return
+      }
+      const attrIds = []
+      this.selections.forEach((item) => attrIds.push(item.attrId))
+      this.deleteModelAttr(attrIds.join(','))
+    },
+    /**
+     * 批量发布属性
+     */
+    batchDeletePublish(){
+      if (!this.validateSelected()) return
+      if (this.selections.some((item) => !item.canDelete)){
+        this.$msgAlert('只能选择能删除的属性进行发布，请重新选择数据！', 'error')
+        return
+      }
+      const attrIds = []
+      this.selections.forEach((item) => attrIds.push(item.attrId))
     }
   },
   created(){
