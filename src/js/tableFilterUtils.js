@@ -131,7 +131,7 @@ function findDataSuccess(filterData, filterFieldInfo, key){
           return condition < itemValue
         case 'like':
           return itemValue !== undefined && itemValue !== null &&
-                 itemValue.toString().indexOf(condition) >= 0
+                 itemValue.toString().toLowerCase().indexOf(condition.toString().toLowerCase()) >= 0
         default:
           break
       }

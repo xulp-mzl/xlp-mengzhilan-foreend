@@ -20,10 +20,10 @@ export default {
     }
   },
   methods: {
-    filterData(data){
+    filterData(data, currentPage){
       if (hasFilterCondition(this.tableData.length === 0 ? this.sourceTableData : this.tableData, data)) {
         this.filterTableData = filterTableData([...this.sourceTableData], data) || []
-        this.currentPage = 1
+        this.currentPage = currentPage || 1
         this.total = this.filterTableData.length
         this.getTablePageData(this.currentPage, this.pageSize)
       }
@@ -62,9 +62,16 @@ export default {
     getTablePageData(currentPage, pageSize){
       currentPage = currentPage && currentPage > 0 ? currentPage : 1
       pageSize = pageSize && pageSize > 0 ? pageSize : 0
-      const index = (currentPage - 1) * pageSize
+      const length = this.filterTableData.length
+      let index = (currentPage - 1) * pageSize
+      // 处理数据删除时，当前页序号大于实际页序号的问题
+      if (index >= length && currentPage > 0){
+        this.currentPage = currentPage - 1
+        index = (this.currentPage - 1) * pageSize
+      }
       const endIndex = index + pageSize
       this.tableData = []
+
       for (let i = index; i < this.filterTableData.length && i < endIndex; i++){
         this.tableData.push(this.filterTableData[i])
       }
@@ -96,6 +103,15 @@ export default {
         this.filterTableData = [...this.sourceTableData]
         this.total = this.filterTableData.length
         this.getTablePageData(this.currentPage, this.pageSize)
+      }
+    },
+    /**
+     * 重新刷新当前页
+     */
+    refreshPage(){
+      const $table = this.$refs.tableData
+      if ($table){
+        this.filterData($table.getFilterData(), this.currentPage)
       }
     }
   }

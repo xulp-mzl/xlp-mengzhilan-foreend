@@ -159,9 +159,10 @@ export default {
           appLoading.close()
         })
     },
-    reloadData(isRefreshed){
-      if (isRefreshed) {
-        this.getAllAttrs()
+    async reloadData(isRefreshed){
+      if (isRefreshed === true){
+        await this.getAllAttrs()
+        this.refreshPage()
       }
     }
   },

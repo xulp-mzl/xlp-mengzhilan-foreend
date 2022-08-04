@@ -39,7 +39,7 @@ export default {
     closeDialog(isRefreshed){
       this.$emit('removed', !this.visible, true)
       // 发送关闭表单的事件
-      this.$emit('reload-parent-table', isRefreshed === true)
+      this.$emit('reload-parent-table', isRefreshed)
     },
     /**
      * 重置表单

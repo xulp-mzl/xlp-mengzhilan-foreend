@@ -65,7 +65,6 @@ import PaginationTableDataMixins from '@/components/mixins/table/PaginationTable
 import EditModelForm from '@/components/model/EditModelForm'
 import EditModelConfigForm from '@/components/model/EditModelConfigForm'
 import ModelAttrConfig from '@/components/model/ModelAttrConfig'
-import {filterTableData, getFieldFilterInfo} from '@/js/tableFilterUtils'
 
 export default {
   name: 'MenuTableData',
@@ -97,11 +96,7 @@ export default {
       if (tableData.errorMsg){
         this.$msgAlert(tableData.errorMsg, 'error')
       } else {
-        this.sourceTableData = tableData.data
-        this.filterTableData = filterTableData([...this.sourceTableData], getFieldFilterInfo(filterInfo))
-        this.filterTableData = [...this.sourceTableData]
-        this.total = this.filterTableData.length
-        this.getTablePageData(this.currentPage, this.pageSize)
+        this.initTableData(tableData.data)
       }
       this.loading = false
     },
@@ -131,9 +126,10 @@ export default {
         this.getModelData()
       }
     },
-    reloadData(isRefreshed){
-      if (isRefreshed){
-        this.getModelData()
+    async reloadData(isRefreshed){
+      if (isRefreshed === true){
+        await this.getModelData()
+        this.refreshPage()
       }
     }
   },
