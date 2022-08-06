@@ -286,7 +286,7 @@
     <template #footer>
       <div class="dialog-footer" style="text-align: center">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="save" :disabled="disabled">保存</el-button>
+        <el-button type="primary" @click="save">保存</el-button>
       </div>
     </template>
   </common-dialog>
@@ -374,7 +374,6 @@ export default {
      */
     async getAttr(){
       this.loading = true
-      this.disabled = true
       const appLoading = this.$appLoading(null, '.model-attr-config-dialog .el-dialog')
       const response = await getModelAttr(this.modelId, this.attrId)
       if (response.errorMsg){
@@ -417,7 +416,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.form.clearValidate()
       })
-      this.disabled = false
       this.loading = false
       appLoading.close()
     },
@@ -476,8 +474,7 @@ export default {
       }
     },
     async _save(){
-      this.loading = true
-      const appLoading = this.$appLoading(null, '.model-attr-config-dialog .el-dialog')
+      const appLoading = this.$appLoading()
       const modelAttrInfoNew = {...this.modelAttrInfo, modelId: this.modelId}
       delete modelAttrInfoNew.canDelete
       let valueFromType = modelAttrInfoNew.valueFromType
@@ -492,7 +489,6 @@ export default {
         this.$tips('数据保存成功！')
       }
       appLoading.close()
-      this.loading = false
     }
   },
   created(){
