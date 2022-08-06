@@ -57,3 +57,12 @@ export function addExtendAttribute(attribute) {
 export function deleteAttrs(modelId, attrIds) {
   return request.delete(BASE_URL + '?modelId=' + modelId + '&attrIds=' + attrIds)
 }
+
+/**
+ * 模型属性发布
+ * @param modelId
+ * @param attrIds
+ */
+export function publishAttrs(modelId, attrIds){
+  return request.put(BASE_URL, null, {params: {modelId, attrIds}})
+}

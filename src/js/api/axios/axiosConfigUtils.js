@@ -10,6 +10,6 @@ export const axiosCommonConfig = {
     return ret
   }],
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
   }
 }
