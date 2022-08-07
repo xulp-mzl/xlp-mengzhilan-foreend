@@ -19,14 +19,7 @@ request.interceptors.request.use(config => {
 })
 
 request.interceptors.response.use(result => {
-  let data = result.data
-  try {
-    data = (typeof data) === 'string'
-      ? JSON.parse(data.replace(/\n/g, '\\n').replace(/\r/g, '\\r')) : data
-  } catch (e) {
-    console.log(e)
-  }
-  return data
+  return result.data
 }, error => {
   console.log(error.toJSON())
   const {message, name, status} = error.toJSON()

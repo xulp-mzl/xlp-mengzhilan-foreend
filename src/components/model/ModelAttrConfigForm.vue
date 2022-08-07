@@ -192,7 +192,8 @@
                 <el-select v-model="modelAttrInfo.formInputType"
                            placeholder="请选择输入框类型"
                            style="width: 100%;"
-                           class="custom-input">
+                           class="custom-input"
+                           @change="formInputTypeChange">
                   <el-option
                       v-for="option in formInputTypes"
                       :key="option.value"
@@ -226,7 +227,8 @@
                            clearable
                            style="width: 100%;"
                            class="custom-input"
-                           @change="valueFromTypeChange">
+                           @change="valueFromTypeChange"
+                           :disabled="!showValueFrom">
                   <el-option
                       label="来自接口实现类（对可选框生效）"
                       value="CLASS">
@@ -244,7 +246,7 @@
             </el-col>
           </el-row>
 
-          <el-row :gutter="5" v-if="!disabled && valueFromInputFlag !== undefined">
+          <el-row :gutter="5" v-if="!disabled && valueFromInputFlag !== undefined && showValueFrom">
             <el-col :span="16">
               <el-form-item
                   label="值来源："
@@ -364,7 +366,8 @@ export default {
       disabled: false,
       formInputTypes: [],
       valueFromInputFlag: undefined,
-      formValueFromSelection: []
+      formValueFromSelection: [],
+      showValueFrom: false
     }
   },
   methods: {
@@ -411,6 +414,10 @@ export default {
         if (!this.modelAttrInfo.hasOwnProperty('valueFromType')){
           this.$set(this.modelAttrInfo, 'valueFromType', '')
         }
+        if (this.modelAttrInfo.valueFromType){
+          this.valueFromInputFlag = this.modelAttrInfo.valueFromType
+        }
+        this.showValueFrom = this.validateShowValueFrom(this.modelAttrInfo.formInputType)
       }
       // 清除首次进入页面的校验信息
       this.$nextTick(() => {
@@ -489,6 +496,16 @@ export default {
         this.$tips('数据保存成功！')
       }
       appLoading.close()
+    },
+    formInputTypeChange(val){
+      this.modelAttrInfo.valueFromType = undefined
+      this.modelAttrInfo.valueFrom = ''
+      this.showValueFrom = this.validateShowValueFrom(val)
+    },
+    validateShowValueFrom(val){
+      return !!(val.endsWith('SELECTION') ||
+        val === 'BOOLEAN' || val === 'SWITCH' ||
+        val === 'RADIO' || val === 'CHECKBOX')
     }
   },
   created(){
