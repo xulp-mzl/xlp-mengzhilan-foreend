@@ -1,9 +1,17 @@
 <template>
-  <div id="aside-container" ref="asideContainer">
-    <el-menu :default-active="defaultActive" :collapse="collapsed" unique-opened @select="selectedItem">
+  <el-scrollbar wrap-class="scrollbar-wrapper">
+    <el-menu
+        class="aside-container"
+        :default-active="defaultActive"
+        :collapse="isCollapse"
+        background-color="#545c64"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+        unique-opened
+        @select="selectedItem">
       <menu-item :item-data="items"></menu-item>
     </el-menu>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script>
@@ -17,7 +25,6 @@ export default {
   components: {
     MenuItem
   },
-  props: ['collapsed'],
   data(){
     return {
       defaultActive: '',
@@ -87,6 +94,11 @@ export default {
       }
     }
   },
+  computed: {
+    isCollapse() {
+      return this.$store.state.tab.isCollapse
+    }
+  },
   watch: {
     '$route.fullPath': {
       handler(val, oldVal) {
@@ -124,18 +136,29 @@ export default {
 </script>
 
 <style lang="less">
-  #aside-container{
-    width: 100%;
-    position: relative;
-    .el-menu--collapse .el-submenu>.el-submenu__title .el-submenu__icon-arrow{
-      display: none;
+  .aside-container{
+    &.el-menu{
+      border: none;
     }
-    .el-menu--collapse .el-menu-item span, .el-menu--collapse .el-submenu>.el-submenu__title span {
-      height: 0;
-      width: 0;
-      overflow: hidden;
-      visibility: hidden;
-      display: inline-block;
+    &.el-menu--collapse{
+      width: 54px;
+      .el-submenu{
+        text-align: center;
+        .el-submenu__title{
+          padding: 0 0 !important;
+          .el-submenu__icon-arrow{
+            display: none;
+          }
+          span{
+            display: none;
+          }
+        }
+      }
     }
+    width: 200px;
+    min-height: 400px;
+    height: 100vh;
+    box-sizing: border-box;
+
   }
 </style>

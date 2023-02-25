@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
-import CommonTableInfo from '@/views/CommonTableInfo'
-import MenuTableData from '@/views/menu/MenuTableData'
-import ModelTableData from '@/views/model/ModelTableData'
+import routerPath from '@/router/routerPath'
 
 // fix vue-router NavigationDuplicated
 const VueRouterPush = VueRouter.prototype.push
@@ -17,16 +14,8 @@ VueRouter.prototype.replace = function replace(location) {
 
 Vue.use(VueRouter)
 
-const routes = [
-  {path: '/menu/setting', component: MenuTableData},
-  {path: '/model/setting', component: ModelTableData},
-  {path: '/tableInfo2', component: CommonTableInfo},
-  {path: '/tableInfo3', component: CommonTableInfo},
-  {path: '/tableInfo4', component: CommonTableInfo}
-]
-
 const router = new VueRouter({
-  routes
+  routes: routerPath
 })
 
 export default router

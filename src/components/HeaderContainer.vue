@@ -1,7 +1,7 @@
 <template>
   <div id="header-container">
     <div id="header-info">
-      <i :class="[collapsed ? 'el-icon-s-fold' : 'el-icon-s-unfold', 'icon-class']" @click="toggleSide"></i>
+      <i :class="[!isCollapse ? 'el-icon-s-fold' : 'el-icon-s-unfold', 'icon-class']" @click="toggleSide"></i>
     </div>
     <div id="tabs-info">
       <div id="tabs-lists">
@@ -26,7 +26,6 @@ import bus from '@/js/eventBus'
 
 export default {
   name: 'HeaderContainer',
-  props: ['collapsed'],
   data(){
     return {
       editableTabsValue: '2',
@@ -47,8 +46,7 @@ export default {
   },
   methods: {
     toggleSide(){
-      // 子向父传值，自定义事件 ，第一个值事件名称，第二个值事件参数
-      this.$emit('toggleSide', !this.collapsed)
+      this.$store.commit('setCollapse')
     },
     addTabFromMenuItem(menuItemInfo){
       const newTabName = menuItemInfo.name
@@ -101,6 +99,14 @@ export default {
       }
     }
   },
+  computed: {
+    isCollapse() {
+      return this.$store.state.tab.isCollapse
+    },
+    menuItemInfo(){
+      return this.$store.state.menuItemInfo
+    }
+  },
   watch: {
     menuItemInfo: {
       handler(newVal, oldVal){
@@ -111,11 +117,6 @@ export default {
       immediate: true,
       // 监听对象属性变化
       deep: true
-    }
-  },
-  computed: {
-    menuItemInfo(){
-      return this.$store.state.menuItemInfo
     }
   }
 }
