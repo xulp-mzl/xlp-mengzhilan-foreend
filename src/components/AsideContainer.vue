@@ -8,6 +8,7 @@
         text-color="#fff"
         active-text-color="#ffd04b"
         unique-opened
+        mode="vertical"
         @select="selectedItem">
       <menu-item :item-data="items"></menu-item>
     </el-menu>
@@ -159,6 +160,5 @@ export default {
     min-height: 400px;
     height: 100vh;
     box-sizing: border-box;
-
   }
 </style>

@@ -3,7 +3,8 @@
     <template v-for="item in itemData">
       <el-submenu v-if="item.hasOwnProperty('children') && item.children.length > 0" :key="item.id"
                   :disabled="item.hasOwnProperty('disabled') && item.disabled === true"
-                  :index="item.path">
+                  :index="item.path"
+                  popper-append-to-body>
         <template #title>
           <i v-if="item.iconType === 'element-ui' && item.icon" :class="item.icon"></i>
           <span>{{item.title}}</span>
