@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import tabStore from '@/store/tab'
-import menuStore from '@/store/menu'
+import tabStore from '@/store/modules/tab'
+import menuStore from '@/store/modules/menu'
+import headerStore from '@/store/modules/header'
+import getters from '@/store/getters'
 
 Vue.use(Vuex)
 
@@ -14,9 +16,6 @@ export default new Vuex.Store({
     reloadCurrentPage: true
   },
   mutations: {
-    setMenuItemInfo(state, menuItemInfo){
-      state.menuItemInfo = menuItemInfo
-    },
     setCurrentSelectedTabName(state, currentSelectedTabName){
       state.currentSelectedTabName = currentSelectedTabName
     },
@@ -28,6 +27,8 @@ export default new Vuex.Store({
   },
   modules: {
     tab: tabStore,
-    menu: menuStore
-  }
+    menu: menuStore,
+    header: headerStore
+  },
+  getters
 })

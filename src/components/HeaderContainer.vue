@@ -1,21 +1,29 @@
 <template>
   <div id="header-container">
     <div id="header-info">
-      <i :class="[!isCollapse ? 'el-icon-s-fold' : 'el-icon-s-unfold', 'icon-class']" @click="toggleSide"></i>
+      <div class="header-left">
+        <i :class="[!isCollapse ? 'el-icon-s-fold' : 'el-icon-s-unfold', 'icon-class']" @click="toggleSide"></i>
+        <!-- 面包屑-->
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item v-for="(item, index) in breadcrumb" :key="item + '-' + index">{{item}}</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <div class="header-right">
+        <span>右侧</span>
+      </div>
     </div>
     <div id="tabs-info">
       <div id="tabs-lists">
         <el-tabs v-model="editableTabsValue" type="card" @tab-remove="removeTab" @tab-click="selectTab">
           <el-tab-pane  v-for="item in editableTabs"
-                       :key="item.name"
-                       :label="item.title"
-                       :name="item.name"
-                       :closable="item.closable"
+                        :key="item.name"
+                        :label="item.title"
+                        :name="item.name"
+                        :closable="item.closable"
           >
           </el-tab-pane>
         </el-tabs>
       </div>
-      <div id="tab-option"></div>
     </div>
   </div>
 </template>
@@ -23,6 +31,7 @@
 <script>
 
 import bus from '@/js/eventBus'
+import {mapMutations, mapGetters} from 'vuex'
 
 export default {
   name: 'HeaderContainer',
@@ -34,20 +43,13 @@ export default {
         name: '1',
         content: 'Tab 1 content',
         path: ''
-      }, {
-        title: 'Tab 2',
-        name: '2',
-        content: 'Tab 2 content',
-        path: ''
       }],
       tabIndex: 2,
       currentMenuInfo: this.$store.state.menuItemInfo
     }
   },
   methods: {
-    toggleSide(){
-      this.$store.commit('setCollapse')
-    },
+    ...mapMutations(['toggleSide']),
     addTabFromMenuItem(menuItemInfo){
       const newTabName = menuItemInfo.name
       // eslint-disable-next-line no-unused-vars
@@ -100,9 +102,10 @@ export default {
     }
   },
   computed: {
-    isCollapse() {
-      return this.$store.state.tab.isCollapse
-    },
+    ...mapGetters([
+      'isCollapse',
+      'breadcrumb'
+    ]),
     menuItemInfo(){
       return this.$store.state.menuItemInfo
     }
@@ -126,25 +129,50 @@ export default {
   #header-container{
     height: 100%;
     #header-info {
-      background-color: aqua;
+      background-color: #545c64;
       display: flex;
       align-items: center;
       height: 60px;
-      .icon-class {
-        color: black;
-        font-size: 30px;
-        cursor: pointer;
-      }
       padding: 0 20px;
+      border-left: 1px solid #777777;
+      flex-shrink: 0;
+      justify-content: space-between;
+
+      .header-left{
+        display: flex;
+        align-items: center;
+        .icon-class {
+          color: white;
+          font-size: 30px;
+          cursor: pointer;
+        }
+        .el-breadcrumb{
+          margin-left: 10px;
+          .el-breadcrumb__item{
+            .el-breadcrumb__inner{
+              font-weight: 500;
+              font-size: 12px;
+              color: #cccccc;
+            }
+            &:last-child{
+              .el-breadcrumb__inner {
+                color: white;
+              }
+            }
+          }
+        }
+      }
+      .header-right{
+
+      }
     }
     #tabs-info{
       height: 40px;
-      line-height: 40px;
-      padding: 0 20px;
       background-color: #F5F7FA;
       position: relative;
       #tabs-lists{
-        .calcWidth(150px);
+        height: 100%;
+        width: 100%;
         .el-tabs{
           border-bottom: 0;
           border-top: 0;
@@ -152,28 +180,19 @@ export default {
             border-bottom: 0;
             border-top: 0;
             margin-bottom: 0;
+            .el-tabs__item {
+              height: 38px;
+              &.is-active{
+                background-color: white;
+              }
+            }
+          }
+          .el-tabs__content{
+            position: relative;
+            height: 0;
+            display: none;
           }
         }
-        .el-tabs__item {
-          height: 38px;
-        }
-
-        .el-tabs__item.is-active{
-          background-color: white;
-        }
-        .el-tabs__content{
-          position: relative;
-          height: 0;
-          display: none;
-        }
-      }
-      #tab-option{
-        width: 150px;
-        height: 100%;
-        background-color: aquamarine;
-        position: absolute;
-        right: 20px;
-        top: 0;
       }
     }
   }

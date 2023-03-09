@@ -24,14 +24,9 @@ export default {
   name: 'Main',
   components: {AsideContainer, HeaderContainer, MainContainer},
   data(){
-    return {
-      collapsed: true
-    }
+    return {}
   },
   methods: {
-    toggleSide(val){
-      this.collapsed = val
-    }
   }
 }
 </script>

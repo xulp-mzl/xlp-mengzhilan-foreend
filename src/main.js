@@ -11,7 +11,7 @@ import '@/css/public.css'
 import '@/css/common.less'
 import '@/css/platform.css'
 
-import '@/js/extVue.js'
+import '@/js/vueUtils'
 import '@/permission'
 
 Vue.config.productionTip = false

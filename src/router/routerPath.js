@@ -11,11 +11,11 @@ const routerPath = [
     redirect: '/menu/setting',
     name: routerName.main,
     children: [
-      {path: '/menu/setting', component: MenuTableData},
-      {path: '/model/setting', component: ModelTableData},
-      {path: '/tableInfo2', component: CommonTableInfo},
-      {path: '/tableInfo3', component: CommonTableInfo},
-      {path: '/tableInfo4', component: CommonTableInfo}
+      {path: 'menu/setting', component: MenuTableData},
+      {path: 'model/setting', component: ModelTableData},
+      {path: 'tableInfo2', component: CommonTableInfo},
+      {path: 'tableInfo3', component: CommonTableInfo},
+      {path: 'tableInfo4', component: CommonTableInfo}
     ]
   }
 ]
