@@ -15,11 +15,11 @@
     <div id="tabs-info">
       <div id="tabs-lists">
         <el-tabs v-model="editableTabsValue" type="card" @tab-remove="removeTab" @tab-click="selectTab">
-          <el-tab-pane  v-for="item in editableTabs"
-                        :key="item.name"
+          <el-tab-pane  v-for="item in tabList"
+                        :key="item.id"
                         :label="item.title"
-                        :name="item.name"
-                        :closable="item.closable"
+                        :name="item.path"
+                        :closable="true"
           >
           </el-tab-pane>
         </el-tabs>
@@ -30,96 +30,48 @@
 
 <script>
 
-import bus from '@/js/eventBus'
 import {mapMutations, mapGetters} from 'vuex'
 
 export default {
   name: 'HeaderContainer',
   data(){
     return {
-      editableTabsValue: '2',
-      editableTabs: [{
-        title: 'Tab 1',
-        name: '1',
-        content: 'Tab 1 content',
-        path: ''
-      }],
-      tabIndex: 2,
-      currentMenuInfo: this.$store.state.menuItemInfo
+      editableTabsValue: ''
     }
   },
   methods: {
-    ...mapMutations(['toggleSide']),
-    addTabFromMenuItem(menuItemInfo){
-      const newTabName = menuItemInfo.name
-      // eslint-disable-next-line no-unused-vars
-      const item = this.editableTabs.find(item => {
-        return item.name === newTabName
-      })
-      if (!item){
-        this.editableTabs.push({
-          title: newTabName,
-          name: newTabName,
-          content: '',
-          path: menuItemInfo.path,
-          flag: menuItemInfo.flag,
-          closable: true
-        })
-      }
-      this.editableTabsValue = newTabName
-    },
-    removeTab(targetName) {
-      const tabs = this.editableTabs
-      let activeName = this.editableTabsValue
-      if (activeName === targetName) {
-        tabs.forEach((tab, index) => {
-          if (tab.name === targetName) {
-            const nextTab = tabs[index + 1] || tabs[index - 1]
-            if (nextTab) {
-              activeName = nextTab.name
-            }
-          }
-        })
-      }
+    ...mapMutations(['toggleSide', 'removeTabInStore']),
 
-      this.editableTabsValue = activeName
-      this.editableTabs = tabs.filter(tab => tab.name !== targetName)
-      this.changeTab(activeName)
-    },
-    selectTab(tab){
-      if (this.$store.state.currentSelectedTabName !== tab.label){
-        this.changeTab(tab.label)
+    // 移除tab
+    removeTab(targetName) {
+      this.removeTabInStore(targetName)
+      if (targetName === this.editableTabsValue){
+        this.$router.push(this.currentTab.path)
       }
     },
-    changeTab(name){
-      const item = this.editableTabs.find(item => {
-        return item.name === name
-      })
-      if (item){
-        this.$store.commit('setCurrentSelectedTabName', name)
-        bus.$emit('changeMenuItemByTab', item)
+
+    // 切换Tab页，进行路由跳转
+    selectTab(tab){
+      const oldEditableTabsValue = this.currentTab.path
+      if (tab.name !== oldEditableTabsValue){
+        this.$router.push(tab.name)
       }
     }
   },
   computed: {
     ...mapGetters([
       'isCollapse',
-      'breadcrumb'
-    ]),
-    menuItemInfo(){
-      return this.$store.state.menuItemInfo
-    }
+      'breadcrumb',
+      'tabList',
+      'currentTab'
+    ])
   },
   watch: {
-    menuItemInfo: {
-      handler(newVal, oldVal){
-        if (newVal && newVal.name){
-          this.addTabFromMenuItem(newVal)
-        }
+    currentTab: {
+      handler(newVal){
+        this.editableTabsValue = newVal.path
       },
-      immediate: true,
-      // 监听对象属性变化
-      deep: true
+      immediate: true
     }
   }
 }
@@ -184,6 +136,7 @@ export default {
               height: 38px;
               &.is-active{
                 background-color: white;
+                border-bottom: 0;
               }
             }
           }

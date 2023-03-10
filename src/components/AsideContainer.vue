@@ -37,7 +37,9 @@ export default {
     ...mapMutations(['setMenus', 'setRoute']),
 
     selectedItem(index){
-      this.$router.push(index)
+      if (this.$route.path !== index){
+        this.$router.push(index)
+      }
     },
     async getMenuItemData(){
       const tableData = await getMenuItemData()

@@ -1,7 +1,9 @@
 const getters = {
   isCollapse: state => state.header.isCollapse,
-  breadcrumb: state => state.menu.breadcrumb,
-  menus: state => state.menu.menus,
-  activeMenu: state => state.menu.activeMenu
+  breadcrumb: state => state.breadcrumb,
+  menus: state => state.menus,
+  activeMenu: state => state.activeMenu,
+  tabList: state => state.tabList,
+  currentTab: state => state.currentTab
 }
 export default getters
