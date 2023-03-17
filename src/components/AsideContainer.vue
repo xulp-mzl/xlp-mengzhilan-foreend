@@ -87,7 +87,6 @@ export default {
       }
     }
     width: 200px;
-    min-height: 400px;
     height: 100vh;
     box-sizing: border-box;
   }
